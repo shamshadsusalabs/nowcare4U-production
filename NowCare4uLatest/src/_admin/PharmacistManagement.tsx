@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useAdminAuth } from './AdminContext';
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  FileText, 
-  Receipt, 
-  Calendar, 
-  CheckCircle, 
-  XCircle, 
-  Clock, 
+import {
+  User,
+  Mail,
+  Phone,
+  FileText,
+  Receipt,
+  Calendar,
+  CheckCircle,
+  XCircle,
+  Clock,
   Search,
   AlertCircle
 } from 'lucide-react';
@@ -42,15 +42,15 @@ export default function PharmacistManagement() {
 
   const loadPharmacists = async () => {
     if (!token) return;
-    
+
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/admin/pharmacists', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/admin/pharmacists', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         setPharmacists(data.pharmacists);
       }
@@ -64,7 +64,7 @@ export default function PharmacistManagement() {
   const handleApproval = async (pharmacistId: string, isApproved: boolean, rejectionReason?: string) => {
     try {
       setActionLoading(pharmacistId);
-      const response = await fetch(`http://localhost:5000/api/admin/pharmacists/${pharmacistId}/status`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/pharmacists/${pharmacistId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -74,9 +74,9 @@ export default function PharmacistManagement() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
-        setPharmacists(pharmacists.map(p => 
+        setPharmacists(pharmacists.map(p =>
           p._id === pharmacistId ? { ...p, isApproved, rejectionReason } : p
         ));
         alert(`Pharmacist ${isApproved ? 'approved' : 'rejected'} successfully!`);
@@ -94,7 +94,7 @@ export default function PharmacistManagement() {
   const handleVerification = async (pharmacistId: string, isVerified: boolean, rejectionReason?: string) => {
     try {
       setActionLoading(pharmacistId);
-      const response = await fetch(`http://localhost:5000/api/admin/pharmacists/${pharmacistId}/verify`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/pharmacists/${pharmacistId}/verify`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -104,9 +104,9 @@ export default function PharmacistManagement() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
-        setPharmacists(pharmacists.map(p => 
+        setPharmacists(pharmacists.map(p =>
           p._id === pharmacistId ? { ...p, isVerified, rejectionReason } : p
         ));
         alert(`Pharmacist ${isVerified ? 'verified' : 'verification rejected'} successfully!`);
@@ -156,7 +156,7 @@ export default function PharmacistManagement() {
         </span>
       );
     }
-    
+
     if (pharmacist.isVerified && pharmacist.isApproved) {
       return (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -165,7 +165,7 @@ export default function PharmacistManagement() {
         </span>
       );
     }
-    
+
     if (pharmacist.isApproved) {
       return (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -174,7 +174,7 @@ export default function PharmacistManagement() {
         </span>
       );
     }
-    
+
     return (
       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
         <Clock className="w-3 h-3 mr-1" />
@@ -324,7 +324,7 @@ export default function PharmacistManagement() {
                             </button>
                           </div>
                         )}
-                        
+
                         {pharmacist.isApproved && !pharmacist.isVerified && !pharmacist.rejectionReason && (
                           <div className="flex space-x-2">
                             <button
@@ -345,13 +345,13 @@ export default function PharmacistManagement() {
                             </button>
                           </div>
                         )}
-                        
+
                         {(pharmacist.isVerified || pharmacist.rejectionReason) && (
                           <span className="text-xs text-gray-500">
                             {pharmacist.isVerified ? 'Fully processed' : 'Action completed'}
                           </span>
                         )}
-                        
+
                         {actionLoading === pharmacist._id && (
                           <span className="text-xs text-blue-600">Processing...</span>
                         )}

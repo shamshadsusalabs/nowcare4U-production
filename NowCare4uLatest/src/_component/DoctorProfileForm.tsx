@@ -31,7 +31,7 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
   console.log('Doctor data received in profile form:', doctor);
   console.log('License number from doctor:', doctor.licenseNumber);
   console.log('All doctor keys:', Object.keys(doctor));
-  
+
   const [formData, setFormData] = useState({
     name: doctor.name || '',
     licenseNumber: doctor.licenseNumber || '',
@@ -73,13 +73,13 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) return
 
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/doctors/profile', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
   return (
     <div className="bg-white rounded-2xl p-6 shadow-lg">
       <h3 className="text-xl font-semibold text-gray-900 mb-6">Complete Your Profile</h3>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -175,9 +175,8 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.phone ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.phone ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="+91 9876543210"
             />
             {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
@@ -193,9 +192,8 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
               name="speciality"
               value={formData.speciality}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.speciality ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.speciality ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="e.g., Cardiologist, Pediatrician"
             />
             {errors.speciality && <p className="text-red-500 text-sm mt-1">{errors.speciality}</p>}
@@ -211,9 +209,8 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
               name="experience"
               value={formData.experience}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.experience ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.experience ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="e.g., 10+ Years"
             />
             {errors.experience && <p className="text-red-500 text-sm mt-1">{errors.experience}</p>}
@@ -229,9 +226,8 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
               name="location"
               value={formData.location}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.location ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.location ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="e.g., Mumbai, India"
             />
             {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
@@ -247,9 +243,8 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
               name="consultationFee"
               value={formData.consultationFee}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.consultationFee ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.consultationFee ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="e.g., ₹1000"
             />
             {errors.consultationFee && <p className="text-red-500 text-sm mt-1">{errors.consultationFee}</p>}
@@ -266,9 +261,8 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
             name="qualification"
             value={formData.qualification}
             onChange={handleInputChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.qualification ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.qualification ? 'border-red-500' : 'border-gray-300'
+              }`}
             rows={3}
             placeholder="e.g., MBBS, MD Cardiology from AIIMS"
           />
@@ -281,7 +275,7 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
             <Globe className="w-4 h-4 inline mr-2" />
             Languages Spoken
           </label>
-          
+
           {/* Selected Languages */}
           <div className="flex flex-wrap gap-2 mb-3">
             {formData.languages.map((lang) => (
@@ -333,11 +327,10 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
                 type="button"
                 onClick={() => addLanguage(lang)}
                 disabled={formData.languages.includes(lang)}
-                className={`px-3 py-1 rounded-full text-sm transition-colors duration-200 ${
-                  formData.languages.includes(lang)
+                className={`px-3 py-1 rounded-full text-sm transition-colors duration-200 ${formData.languages.includes(lang)
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
+                  }`}
               >
                 {lang}
               </button>

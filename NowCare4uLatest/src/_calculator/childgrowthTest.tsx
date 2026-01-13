@@ -227,11 +227,10 @@ export default function ChildGrowthTest() {
                     <div className="flex justify-center gap-6">
                       <button
                         onClick={() => setGender(0)}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${
-                          gender === 0
+                        className={`p-4 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${gender === 0
                             ? "border-blue-500 bg-gradient-to-br from-blue-100 to-blue-200 shadow-lg"
                             : "border-gray-300 bg-white hover:border-blue-300"
-                        }`}
+                          }`}
                       >
                         <div className="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
                           <span className="text-2xl">👦</span>
@@ -240,11 +239,10 @@ export default function ChildGrowthTest() {
                       </button>
                       <button
                         onClick={() => setGender(1)}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${
-                          gender === 1
+                        className={`p-4 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${gender === 1
                             ? "border-pink-500 bg-gradient-to-br from-pink-100 to-pink-200 shadow-lg"
                             : "border-gray-300 bg-white hover:border-pink-300"
-                        }`}
+                          }`}
                       >
                         <div className="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-pink-100 to-pink-200 rounded-xl flex items-center justify-center">
                           <span className="text-2xl">👧</span>
@@ -413,21 +411,19 @@ export default function ChildGrowthTest() {
                   <div className="flex justify-center gap-4 mt-6">
                     <button
                       onClick={() => setChartType("weight")}
-                      className={`px-6 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                        chartType === "weight"
+                      className={`px-6 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${chartType === "weight"
                           ? "bg-white text-slate-800 shadow-lg"
                           : "border border-slate-500 text-white hover:border-white"
-                      }`}
+                        }`}
                     >
                       Show Weight
                     </button>
                     <button
                       onClick={() => setChartType("height")}
-                      className={`px-6 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                        chartType === "height"
+                      className={`px-6 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${chartType === "height"
                           ? "bg-white text-slate-800 shadow-lg"
                           : "border border-slate-500 text-white hover:border-white"
-                      }`}
+                        }`}
                     >
                       Show Height
                     </button>
@@ -457,25 +453,23 @@ export default function ChildGrowthTest() {
                                 </span>
                                 <div className="flex gap-2">
                                   <span
-                                    className={`px-2 py-1 rounded-lg text-xs font-medium ${
-                                      weightStatus === "normal"
+                                    className={`px-2 py-1 rounded-lg text-xs font-medium ${weightStatus === "normal"
                                         ? "bg-green-100 text-green-700"
                                         : weightStatus === "below"
                                           ? "bg-yellow-100 text-yellow-700"
                                           : "bg-red-100 text-red-700"
-                                    }`}
+                                      }`}
                                   >
                                     Weight: {weightStatus}
                                   </span>
                                   {heightEntry && (
                                     <span
-                                      className={`px-2 py-1 rounded-lg text-xs font-medium ${
-                                        heightStatus === "normal"
+                                      className={`px-2 py-1 rounded-lg text-xs font-medium ${heightStatus === "normal"
                                           ? "bg-green-100 text-green-700"
                                           : heightStatus === "below"
                                             ? "bg-yellow-100 text-yellow-700"
                                             : "bg-red-100 text-red-700"
-                                      }`}
+                                        }`}
                                     >
                                       Height: {heightStatus}
                                     </span>
@@ -520,7 +514,7 @@ export default function ChildGrowthTest() {
                         onClick={() => {
                           const input = document.createElement("input")
                           input.type = "date"
-                          input.min = dob?.toISOString().split("T")[0]
+                          input.min = dob?.toISOString().split("T")[0] || ""
                           input.max = new Date().toISOString().split("T")[0]
                           input.value = entryDate.toISOString().split("T")[0]
                           input.onchange = (e) => {

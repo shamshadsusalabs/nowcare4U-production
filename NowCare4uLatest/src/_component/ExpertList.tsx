@@ -62,11 +62,10 @@ const DoctorCard = ({ doctor, onBookAppointment }: { doctor: Doctor, onBookAppoi
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-4 h-4 ${
-                    i < Math.floor(doctor.rating)
+                  className={`w-4 h-4 ${i < Math.floor(doctor.rating)
                       ? "text-yellow-400 fill-current"
                       : "text-gray-300"
-                  }`}
+                    }`}
                 />
               ))}
               <span className="text-sm text-gray-600 ml-2">({doctor.rating})</span>
@@ -151,8 +150,8 @@ const ExpertList = () => {
       try {
         setLoading(true)
         const [doctorsRes, specialtiesRes] = await Promise.all([
-          fetch('http://localhost:5000/api/public/doctors'),
-          fetch('http://localhost:5000/api/public/specialties')
+          fetch('https://nowcare4-u-production-acbz.vercel.app/api/public/doctors'),
+          fetch('https://nowcare4-u-production-acbz.vercel.app/api/public/specialties')
         ])
 
         if (doctorsRes.ok) {
@@ -321,11 +320,10 @@ const ExpertList = () => {
                   <button
                     key={i}
                     onClick={() => setCurrentPage(i + 1)}
-                    className={`w-12 h-12 rounded-2xl font-semibold transition-all duration-300 ${
-                      currentPage === i + 1
+                    className={`w-12 h-12 rounded-2xl font-semibold transition-all duration-300 ${currentPage === i + 1
                         ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
                         : "bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-white border border-white/50"
-                    }`}
+                      }`}
                   >
                     {i + 1}
                   </button>

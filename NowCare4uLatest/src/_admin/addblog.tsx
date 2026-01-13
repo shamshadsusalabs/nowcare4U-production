@@ -131,7 +131,7 @@ const AddBlogWithImages: React.FC = () => {
         data.append("image", formData.image)
       }
 
-      const response = await fetch("http://localhost:5000/api/blogs/add", {
+      const response = await fetch("https://nowcare4-u-production-acbz.vercel.app/api/blogs/add", {
         method: "POST",
         body: data,
       })
@@ -140,7 +140,7 @@ const AddBlogWithImages: React.FC = () => {
         throw new Error("Failed to add blog")
       }
 
-      
+
       setSuccess("Blog added successfully!")
       setFormData({
         title: "",

@@ -36,7 +36,7 @@ export default function RNATherapy() {
 
   // Animation progress for treatment visualization
   useEffect(() => {
-    let interval: number
+    let interval: NodeJS.Timeout
     if (isPlaying) {
       interval = setInterval(() => {
         setProgress((prev) => (prev >= 100 ? 0 : prev + 2))
@@ -329,11 +329,10 @@ export default function RNATherapy() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                    activeTab === tab.id
+                  className={`flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${activeTab === tab.id
                       ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg transform scale-105"
                       : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
-                  }`}
+                    }`}
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
@@ -540,13 +539,12 @@ export default function RNATherapy() {
                           <div className="text-lg font-bold text-emerald-600">{phase.successRate}%</div>
                           <div className="text-xs text-gray-600">Success Rate</div>
                           <div
-                            className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
-                              phase.status === "Completed"
+                            className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${phase.status === "Completed"
                                 ? "bg-emerald-100 text-emerald-800"
                                 : phase.status === "Ongoing"
                                   ? "bg-blue-100 text-blue-800"
                                   : "bg-gray-100 text-gray-800"
-                            }`}
+                              }`}
                           >
                             {phase.status}
                           </div>

@@ -37,24 +37,24 @@ interface DoctorActions {
   register: (name: string, email: string, password: string, phone: string, licenseNumber: string) => Promise<boolean>
   logout: () => void
   checkAuth: () => Promise<void>
-  
+
   // Profile actions
   updateProfile: (profileData: Partial<Doctor>) => Promise<boolean>
-  
+
   // Time slot actions
   createTimeSlots: (date: string, startHour: number, endHour: number) => Promise<boolean>
   fetchTimeSlots: () => Promise<void>
   toggleSlotAvailability: (slotId: string, isAvailable: boolean) => Promise<boolean>
-  
+
   // Booking actions
   fetchBookings: () => Promise<void>
-  
+
   // Utility actions
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
 }
 
-const API_BASE = 'http://localhost:5000/api'
+const API_BASE = 'https://nowcare4-u-production-acbz.vercel.app/api'
 
 export const useDoctorStore = create<DoctorState & DoctorActions>()(
   persist(
@@ -77,9 +77,9 @@ export const useDoctorStore = create<DoctorState & DoctorActions>()(
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
           })
-          
+
           const data = await response.json()
-          
+
           if (data.success) {
             set({
               doctor: data.doctor,
@@ -106,9 +106,9 @@ export const useDoctorStore = create<DoctorState & DoctorActions>()(
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password, phone, licenseNumber })
           })
-          
+
           const data = await response.json()
-          
+
           if (data.success) {
             set({
               doctor: data.doctor,
@@ -146,7 +146,7 @@ export const useDoctorStore = create<DoctorState & DoctorActions>()(
           const response = await fetch(`${API_BASE}/doctors/profile`, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
-          
+
           if (response.ok) {
             const data = await response.json()
             set({ doctor: data.doctor, isAuthenticated: true })
@@ -173,9 +173,9 @@ export const useDoctorStore = create<DoctorState & DoctorActions>()(
             },
             body: JSON.stringify(profileData)
           })
-          
+
           const data = await response.json()
-          
+
           if (data.success) {
             set({ doctor: data.doctor, loading: false })
             return true
@@ -204,9 +204,9 @@ export const useDoctorStore = create<DoctorState & DoctorActions>()(
             },
             body: JSON.stringify({ date, startHour, endHour })
           })
-          
+
           const data = await response.json()
-          
+
           if (data.success) {
             await get().fetchTimeSlots()
             set({ loading: false })
@@ -229,7 +229,7 @@ export const useDoctorStore = create<DoctorState & DoctorActions>()(
           const response = await fetch(`${API_BASE}/doctors/time-slots`, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
-          
+
           if (response.ok) {
             const data = await response.json()
             console.log('Fetched time slots:', data)
@@ -253,7 +253,7 @@ export const useDoctorStore = create<DoctorState & DoctorActions>()(
             },
             body: JSON.stringify({ isAvailable })
           })
-          
+
           if (response.ok) {
             await get().fetchTimeSlots()
             return true
@@ -273,7 +273,7 @@ export const useDoctorStore = create<DoctorState & DoctorActions>()(
           const response = await fetch(`${API_BASE}/doctors/bookings`, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
-          
+
           if (response.ok) {
             const data = await response.json()
             set({ bookings: data.bookings })

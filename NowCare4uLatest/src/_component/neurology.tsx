@@ -36,7 +36,7 @@ export default function Neurology() {
 
   // Brain activity simulation
   useEffect(() => {
-    let interval: number
+    let interval: NodeJS.Timeout
     if (isPlaying) {
       interval = setInterval(() => {
         setBrainActivity((prev) => (prev >= 100 ? 0 : prev + 3))
@@ -349,11 +349,10 @@ export default function Neurology() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                    activeTab === tab.id
+                  className={`flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${activeTab === tab.id
                       ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg transform scale-105"
                       : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
-                  }`}
+                    }`}
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
@@ -586,13 +585,12 @@ export default function Neurology() {
                           <div className="text-lg font-bold text-emerald-600">{condition.successRate}%</div>
                           <div className="text-xs text-gray-600">Success Rate</div>
                           <div
-                            className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
-                              condition.status === "FDA Approved"
+                            className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${condition.status === "FDA Approved"
                                 ? "bg-emerald-100 text-emerald-800"
                                 : condition.status === "Phase III"
                                   ? "bg-blue-100 text-blue-800"
                                   : "bg-purple-100 text-purple-800"
-                            }`}
+                              }`}
                           >
                             {condition.status}
                           </div>

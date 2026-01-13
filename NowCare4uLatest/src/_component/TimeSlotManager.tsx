@@ -32,7 +32,7 @@ const TimeSlotManager = ({ token }: TimeSlotManagerProps) => {
 
   const fetchTimeSlots = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/doctors/time-slots', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/time-slots', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -47,9 +47,9 @@ const TimeSlotManager = ({ token }: TimeSlotManagerProps) => {
   const handleCreateSlots = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    
+
     try {
-      const response = await fetch('http://localhost:5000/api/doctors/time-slots', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/time-slots', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const TimeSlotManager = ({ token }: TimeSlotManagerProps) => {
 
   const toggleSlotAvailability = async (slotId: string, currentAvailability: boolean) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/doctors/time-slots/${slotId}`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/doctors/time-slots/${slotId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ const TimeSlotManager = ({ token }: TimeSlotManagerProps) => {
         <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
           <h4 className="text-lg font-medium text-gray-900 mb-4">Create Time Slots</h4>
           <p className="text-gray-600 mb-4">Create 15-minute time slots for the selected date and time range.</p>
-          
+
           <form onSubmit={handleCreateSlots} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
@@ -186,11 +186,11 @@ const TimeSlotManager = ({ token }: TimeSlotManagerProps) => {
             {Object.entries(slotsByDate).map(([date, slots]) => (
               <div key={date} className="border border-gray-200 rounded-xl p-4">
                 <h5 className="font-medium text-gray-900 mb-3">
-                  {new Date(date).toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
+                  {new Date(date).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                   })}
                 </h5>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

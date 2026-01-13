@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useAdminAuth } from './AdminContext';
-import { 
-  Search, 
-  Filter, 
-  X, 
-  Eye, 
-  Mail, 
-  Phone, 
+import {
+  Search,
+  Filter,
+  X,
+  Eye,
+  Mail,
+  Phone,
   MapPin,
   Calendar,
   Award,
@@ -65,9 +65,9 @@ export default function DoctorManagement() {
 
   const loadDoctors = async () => {
     if (!token) return;
-    
+
     try {
-      const response = await fetch('http://localhost:5000/api/admin/doctors', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/admin/doctors', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
@@ -108,7 +108,7 @@ export default function DoctorManagement() {
   const handleApprove = async (doctorId: string) => {
     setActionLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/doctors/${doctorId}/verify`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/doctors/${doctorId}/verify`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ export default function DoctorManagement() {
   const handleToggleVerification = async (doctorId: string, currentStatus: boolean) => {
     setVerifyingDoctorId(doctorId);
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/doctors/${doctorId}/verify`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/doctors/${doctorId}/verify`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -158,15 +158,15 @@ export default function DoctorManagement() {
 
     setActionLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/doctors/${doctorId}/verify`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/doctors/${doctorId}/verify`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ 
-          isVerified: false, 
-          rejectionReason: rejectionReason.trim() 
+        body: JSON.stringify({
+          isVerified: false,
+          rejectionReason: rejectionReason.trim()
         }),
       });
 
@@ -344,7 +344,7 @@ export default function DoctorManagement() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={() => setShowModal(false)} />
-            
+
             <div className="inline-block w-full max-w-4xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl relative z-10">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Doctor Details</h3>
@@ -416,7 +416,7 @@ export default function DoctorManagement() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-4">
                     <h5 className="font-medium text-gray-900 border-b pb-2">Professional Details</h5>
                     <div className="space-y-3">
@@ -459,7 +459,7 @@ export default function DoctorManagement() {
                       )) || <span className="text-gray-500 text-sm">Not specified</span>}
                     </div>
                   </div>
-                  
+
                   <div>
                     <h5 className="font-medium text-gray-900 mb-2 flex items-center">
                       <Calendar className="w-4 h-4 mr-2" />
@@ -505,7 +505,7 @@ export default function DoctorManagement() {
                         placeholder="Enter reason for rejection..."
                       />
                     </div>
-                    
+
                     <div className="flex space-x-3">
                       <button
                         onClick={() => handleApprove(selectedDoctor._id)}

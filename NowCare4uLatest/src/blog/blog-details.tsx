@@ -50,7 +50,7 @@ const BlogDetail = () => {
 
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/api/blogs/getById/${blogId}`);
+        const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/blogs/getById/${blogId}`);
         const result = await response.json();
 
         if (result.success && result.data) {
@@ -77,7 +77,7 @@ const BlogDetail = () => {
         } else {
           setError("Blog post not found.");
         }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         setError("Failed to fetch blog post.");
       } finally {
@@ -253,11 +253,10 @@ const BlogDetail = () => {
               <div className="flex items-center space-x-2 sm:space-x-4">
                 <button
                   onClick={() => setIsLiked(!isLiked)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 ${
-                    isLiked
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 ${isLiked
                       ? "bg-red-100 text-red-600"
                       : "bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600"
-                  }`}
+                    }`}
                 >
                   <Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />
                   <span>{isLiked ? "Liked" : "Like"}</span>
@@ -265,11 +264,10 @@ const BlogDetail = () => {
 
                 <button
                   onClick={() => setIsBookmarked(!isBookmarked)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 ${
-                    isBookmarked
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 ${isBookmarked
                       ? "bg-blue-100 text-blue-600"
                       : "bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600"
-                  }`}
+                    }`}
                 >
                   <Bookmark className={`w-5 h-5 ${isBookmarked ? "fill-current" : ""}`} />
                   <span>{isBookmarked ? "Saved" : "Save"}</span>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAdminAuth } from './AdminContext';
-import { Trash2, Eye, Calendar, User, Tag, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Trash2, Calendar, User, Tag, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Blog {
   _id: string;
@@ -39,15 +39,15 @@ export default function BlogManagement() {
 
   const loadBlogs = async () => {
     if (!token) return;
-    
+
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/admin/blogs?page=${currentPage}&limit=10`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/blogs?page=${currentPage}&limit=10`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       const data: BlogResponse = await response.json();
-      
+
       if (data.success) {
         setBlogs(data.blogs);
         setTotalPages(data.pages);
@@ -67,13 +67,13 @@ export default function BlogManagement() {
 
     try {
       setDeleting(blogId);
-      const response = await fetch(`http://localhost:5000/api/admin/blogs/${blogId}`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/blogs/${blogId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         setBlogs(blogs.filter(blog => blog._id !== blogId));
         setTotal(total - 1);
@@ -195,11 +195,10 @@ export default function BlogManagement() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        blog.type === 'featured' 
-                          ? 'bg-purple-100 text-purple-800' 
-                          : 'bg-blue-100 text-blue-800'
-                      }`}>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${blog.type === 'featured'
+                        ? 'bg-purple-100 text-purple-800'
+                        : 'bg-blue-100 text-blue-800'
+                        }`}>
                         <Tag className="w-3 h-3 mr-1" />
                         {blog.type}
                       </span>

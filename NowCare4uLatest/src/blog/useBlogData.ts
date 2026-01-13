@@ -42,7 +42,7 @@ export const useBlogData = () => {
       if (!forceRefresh) {
         const cachedData = getCachedData(page, category)
         if (cachedData) {
-        
+
           return cachedData
         }
       }
@@ -57,8 +57,8 @@ export const useBlogData = () => {
           ...(category !== "all" && { type: category }),
         })
 
-      
-        const response = await fetch(`http://localhost:5000/api/blogs/getAll?${queryParams}`)
+
+        const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/blogs/getAll?${queryParams}`)
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
@@ -69,7 +69,7 @@ export const useBlogData = () => {
         if (data.success) {
           // Cache the data
           setCachedData(page, category, data)
-         
+
           return data
         } else {
           throw new Error("API returned unsuccessful response")
@@ -91,18 +91,18 @@ export const useBlogData = () => {
     async (forceRefresh = false): Promise<BlogPost[]> => {
       const cachedData = getCachedData(1, "featured")
       if (!forceRefresh && cachedData) {
-       
+
         return cachedData.data
       }
 
       try {
-       
-        const response = await fetch("http://localhost:5000/api/blogs/getAll?type=featured&limit=4")
+
+        const response = await fetch("https://nowcare4-u-production-acbz.vercel.app/api/blogs/getAll?type=featured&limit=4")
         const data: BlogResponse = await response.json()
 
         if (data.success) {
           setCachedData(1, "featured", data)
-       
+
           return data.data
         }
         return []

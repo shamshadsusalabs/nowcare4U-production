@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { 
-  Calendar, 
-  Clock, 
-  Users, 
-  Settings, 
+import {
+  Calendar,
+  Clock,
+  Users,
+  Settings,
   LogOut,
   Phone,
   Award,
@@ -60,7 +60,7 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/doctors/bookings', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/bookings', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -129,11 +129,10 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 whitespace-nowrap ${
-                  activeTab === tab.id
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 whitespace-nowrap ${activeTab === tab.id
                     ? 'bg-white text-blue-600 shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
-                }`}
+                  }`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{tab.label}</span>
@@ -149,8 +148,8 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white">
               <h2 className="text-2xl font-bold mb-2">Welcome back, Dr. {doctor.name}!</h2>
               <p className="text-blue-100">
-                {doctor.profileCompleted 
-                  ? "Your profile is complete and ready for appointments" 
+                {doctor.profileCompleted
+                  ? "Your profile is complete and ready for appointments"
                   : "Please complete your profile to start receiving appointments"
                 }
               </p>
@@ -163,7 +162,7 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
                   <div>
                     <p className="text-gray-500 text-sm">Today's Appointments</p>
                     <p className="text-2xl font-bold text-gray-900">
-                      {bookings.filter(b => 
+                      {bookings.filter(b =>
                         new Date(b.appointmentDate).toDateString() === new Date().toDateString() &&
                         b.status === 'confirmed'
                       ).length}
@@ -209,11 +208,10 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
                       {booking.patientPhone} • {new Date(booking.appointmentDate).toLocaleDateString()} at {booking.appointmentTime}
                     </p>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                    booking.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                      booking.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                        'bg-gray-100 text-gray-800'
+                    }`}>
                     {booking.status}
                   </span>
                 </div>
@@ -224,9 +222,9 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
 
         {activeTab === 'profile' && (
           isEditingProfile ? (
-            <DoctorProfileForm 
-              doctor={doctor} 
-              token={token} 
+            <DoctorProfileForm
+              doctor={doctor}
+              token={token}
               onUpdate={handleProfileUpdate}
               onCancel={() => setIsEditingProfile(false)}
             />
@@ -280,11 +278,11 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
             </div>
           )
         )}
-        
+
         {activeTab === 'slots' && (
           <TimeSlotManager token={token} />
         )}
-        
+
         {activeTab === 'appointments' && (
           <div className="bg-white rounded-2xl p-6 shadow-lg">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Your Appointments</h3>
@@ -314,11 +312,10 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                        booking.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                          booking.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                        }`}>
                         {booking.status}
                       </span>
                       <p className="text-xs text-gray-500 mt-1">{booking.consultationType}</p>

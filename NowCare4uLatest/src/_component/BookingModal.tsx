@@ -54,26 +54,26 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
     try {
       console.log('Fetching slots for doctor ID:', doctor._id)
       // Use the correct API endpoint for public available slots
-      const response = await fetch(`http://localhost:5000/api/public/doctors/${doctor._id}/available-slots`)
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/public/doctors/${doctor._id}/available-slots`)
       const data = await response.json()
       console.log('Available slots response:', data)
       if (data.success) {
         // Filter slots to show only current date and future dates (up to 1 week)
         const today = new Date()
         today.setHours(0, 0, 0, 0) // Set to start of today
-        
+
         const oneWeekFromNow = new Date()
         oneWeekFromNow.setDate(today.getDate() + 7)
         oneWeekFromNow.setHours(23, 59, 59, 999) // Set to end of the day
-        
+
         const filteredSlots = (data.availableSlots || []).filter((slot: TimeSlot) => {
           const slotDate = new Date(slot.date)
           slotDate.setHours(0, 0, 0, 0) // Set to start of slot date for comparison
-          
+
           // Only show slots from today onwards and within 1 week
           return slotDate >= today && slotDate <= oneWeekFromNow
         })
-        
+
         setAvailableSlots(filteredSlots)
       }
     } catch (error) {
@@ -86,7 +86,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
 
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:5000/api/bookings', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -151,15 +151,13 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
           <div className="flex items-center space-x-4 mt-6">
             {[1, 2, 3].map((stepNum) => (
               <div key={stepNum} className="flex items-center">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                  step >= stepNum ? 'bg-white text-blue-600' : 'bg-white/20 text-white'
-                }`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${step >= stepNum ? 'bg-white text-blue-600' : 'bg-white/20 text-white'
+                  }`}>
                   {stepNum}
                 </div>
                 {stepNum < 3 && (
-                  <div className={`w-12 h-1 mx-2 ${
-                    step > stepNum ? 'bg-white' : 'bg-white/20'
-                  }`}></div>
+                  <div className={`w-12 h-1 mx-2 ${step > stepNum ? 'bg-white' : 'bg-white/20'
+                    }`}></div>
                 )}
               </div>
             ))}
@@ -171,7 +169,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
           {step === 1 && (
             <div className="space-y-6">
               <h3 className="text-lg font-semibold text-gray-900">Select Available Time Slot</h3>
-              
+
               {Object.keys(slotsByDate).length === 0 ? (
                 <div className="text-center py-8">
                   <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -182,11 +180,11 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
                   {Object.entries(slotsByDate).map(([date, slots]) => (
                     <div key={date} className="border border-gray-200 rounded-xl p-4">
                       <h4 className="font-medium text-gray-900 mb-3">
-                        {new Date(date).toLocaleDateString('en-US', { 
-                          weekday: 'long', 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric' 
+                        {new Date(date).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
                         })}
                       </h4>
                       <div className="grid grid-cols-3 gap-2">
@@ -195,13 +193,12 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
                             key={slot._id}
                             onClick={() => !slot.isBooked && setSelectedSlot(slot)}
                             disabled={slot.isBooked}
-                            className={`p-3 rounded-lg border transition-all duration-200 ${
-                              slot.isBooked
+                            className={`p-3 rounded-lg border transition-all duration-200 ${slot.isBooked
                                 ? 'bg-red-100 text-red-700 border-red-200 cursor-not-allowed opacity-60'
                                 : selectedSlot?._id === slot._id
-                                ? 'bg-blue-600 text-white border-blue-600'
-                                : 'bg-green-50 hover:bg-green-100 border-green-200 hover:border-green-300 text-green-800'
-                            }`}
+                                  ? 'bg-blue-600 text-white border-blue-600'
+                                  : 'bg-green-50 hover:bg-green-100 border-green-200 hover:border-green-300 text-green-800'
+                              }`}
                           >
                             <div className="text-sm font-medium">{slot.startTime}</div>
                             <div className="text-xs opacity-75">to {slot.endTime}</div>
@@ -230,7 +227,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
           {step === 2 && (
             <div className="space-y-6">
               <h3 className="text-lg font-semibold text-gray-900">Patient Information</h3>
-              
+
               {/* Selected slot info */}
               <div className="bg-blue-50 rounded-xl p-4">
                 <p className="text-sm text-blue-600 font-medium">Selected Appointment</p>
@@ -299,7 +296,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
-              
+
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Appointment Confirmed!</h3>
                 <p className="text-gray-600">Your appointment has been successfully booked</p>

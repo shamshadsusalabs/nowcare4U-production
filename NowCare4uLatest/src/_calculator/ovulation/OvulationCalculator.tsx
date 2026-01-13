@@ -34,10 +34,10 @@ const Calendar: React.FC<{ start?: Date; end?: Date }> = ({ start, end }) => {
     if (!start || !end) return false;
     const d = new Date(year, month, day);
     return d >= new Date(start.getFullYear(), start.getMonth(), start.getDate()) &&
-           d <= new Date(end.getFullYear(), end.getMonth(), end.getDate());
+      d <= new Date(end.getFullYear(), end.getMonth(), end.getDate());
   };
 
-  const cells = [] as JSX.Element[];
+  const cells = [] as React.JSX.Element[];
   const totalCells = Math.ceil((firstWeekday + count) / 7) * 7;
   for (let i = 0; i < totalCells; i++) {
     const day = i - firstWeekday + 1;
@@ -55,7 +55,7 @@ const Calendar: React.FC<{ start?: Date; end?: Date }> = ({ start, end }) => {
     <div className="w-full max-w-xl mx-auto">
       <div className="bg-blue-600 text-white rounded-t px-4 py-2 text-center font-medium">{monthName} {year}</div>
       <div className="grid grid-cols-7">
-        {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((d) => (
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
           <div key={d} className="border py-1 text-center text-sm font-medium bg-gray-50">{d}</div>
         ))}
         {cells}
@@ -129,22 +129,22 @@ const OvulationCalculator: React.FC = () => {
         <p className="text-gray-600 mb-6">Enter your last period date and cycle length to find your fertile window. Your results will be saved to your account.</p>
 
         <div className="grid gap-4 max-w-xl">
-        <label className="grid gap-2">
-          <span className="text-sm">Last period date</span>
-          <input type="date" className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" value={lastDate} onChange={(e) => setLastDate(e.target.value)} />
-        </label>
-        <label className="grid gap-2">
-          <span className="text-sm">Average cycle length (days, 21-35)</span>
-          <input type="number" min={21} max={35} className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" value={cycleLength} onChange={(e) => setCycleLength(e.target.value)} />
-        </label>
+          <label className="grid gap-2">
+            <span className="text-sm">Last period date</span>
+            <input type="date" className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" value={lastDate} onChange={(e) => setLastDate(e.target.value)} />
+          </label>
+          <label className="grid gap-2">
+            <span className="text-sm">Average cycle length (days, 21-35)</span>
+            <input type="number" min={21} max={35} className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" value={cycleLength} onChange={(e) => setCycleLength(e.target.value)} />
+          </label>
 
-        <button
-          className={`px-4 py-2 rounded-lg text-white shadow ${computed ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-95' : 'bg-gray-400'} disabled:opacity-60`}
-          onClick={submit}
-          disabled={!computed || saving}
-        >
-          {saving ? 'Saving...' : (result ? 'Recalculate & Save' : 'Calculate & Save')}
-        </button>
+          <button
+            className={`px-4 py-2 rounded-lg text-white shadow ${computed ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-95' : 'bg-gray-400'} disabled:opacity-60`}
+            onClick={submit}
+            disabled={!computed || saving}
+          >
+            {saving ? 'Saving...' : (result ? 'Recalculate & Save' : 'Calculate & Save')}
+          </button>
         </div>
 
         {computed && (

@@ -33,10 +33,10 @@ const DoctorPage = () => {
 
   const checkAuthStatus = async () => {
     const savedToken = localStorage.getItem('doctorToken')
-    
+
     if (savedToken) {
       try {
-        const response = await fetch('http://localhost:5000/api/doctors/profile', {
+        const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/profile', {
           headers: {
             'Authorization': `Bearer ${savedToken}`
           }
@@ -55,7 +55,7 @@ const DoctorPage = () => {
         localStorage.removeItem('doctorToken')
       }
     }
-    
+
     setLoading(false)
   }
 
@@ -87,10 +87,10 @@ const DoctorPage = () => {
   }
 
   return (
-    <DoctorDashboard 
-      doctor={doctor} 
-      token={token} 
-      onLogout={handleLogout} 
+    <DoctorDashboard
+      doctor={doctor}
+      token={token}
+      onLogout={handleLogout}
     />
   )
 }

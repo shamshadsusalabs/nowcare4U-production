@@ -65,18 +65,18 @@ const DoctorAuth = ({ onAuthSuccess }: DoctorAuthProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) return
 
     setLoading(true)
-    
+
     try {
       const endpoint = isLogin ? '/api/doctors/login' : '/api/doctors/register'
-      const payload = isLogin 
+      const payload = isLogin
         ? { email: formData.email, password: formData.password }
         : formData
 
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,9 +132,8 @@ const DoctorAuth = ({ onAuthSuccess }: DoctorAuthProps) => {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${
-                          errors.name ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
-                        }`}
+                        className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${errors.name ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
+                          }`}
                         placeholder="Dr. John Smith"
                       />
                     </div>
@@ -152,9 +151,8 @@ const DoctorAuth = ({ onAuthSuccess }: DoctorAuthProps) => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${
-                          errors.phone ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
-                        }`}
+                        className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${errors.phone ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
+                          }`}
                         placeholder="+91 9876543210"
                       />
                     </div>
@@ -172,9 +170,8 @@ const DoctorAuth = ({ onAuthSuccess }: DoctorAuthProps) => {
                         name="licenseNumber"
                         value={formData.licenseNumber}
                         onChange={handleInputChange}
-                        className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${
-                          errors.licenseNumber ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
-                        }`}
+                        className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${errors.licenseNumber ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
+                          }`}
                         placeholder="MD123456789"
                       />
                     </div>
@@ -194,9 +191,8 @@ const DoctorAuth = ({ onAuthSuccess }: DoctorAuthProps) => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${
-                      errors.email ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
-                    }`}
+                    className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${errors.email ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
+                      }`}
                     placeholder="doctor@example.com"
                   />
                 </div>
@@ -214,9 +210,8 @@ const DoctorAuth = ({ onAuthSuccess }: DoctorAuthProps) => {
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`w-full pl-12 pr-12 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${
-                      errors.password ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
-                    }`}
+                    className={`w-full pl-12 pr-12 py-3 border-2 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 ${errors.password ? 'border-red-500' : 'border-gray-200 focus:border-blue-500'
+                      }`}
                     placeholder="Enter your password"
                   />
                   <button
