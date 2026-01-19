@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 
 import ScrollToTop from './ScrollToTop'
@@ -46,6 +46,7 @@ const KickRecords = lazy(() => import('./_calculator/kick/KickRecords'))
 const PhoneLogin = lazy(() => import('./auth/PhoneLogin'))
 
 const Addblog = lazy(() => import('./_admin/addblog'))
+const ProtectedAdminRoute = lazy(() => import('./_admin/ProtectedAdminRoute'))
 
 function App() {
   const location = useLocation()
@@ -184,7 +185,7 @@ function App() {
             </Suspense>
           }
         />
-         <Route
+        <Route
           path="/congnitiveTest"
           element={
             <Suspense fallback={<div className="text-center p-10">Loading...</div>}>
@@ -308,10 +309,13 @@ function App() {
           path="/admin"
           element={
             <Suspense fallback={<div className="text-center p-10">Loading...</div>}>
-              <AdminLayout />
+              <ProtectedAdminRoute>
+                <AdminLayout />
+              </ProtectedAdminRoute>
             </Suspense>
           }
         >
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="doctors" element={<DoctorManagement />} />
           <Route path="pharmacists" element={<PharmacistManagement />} />

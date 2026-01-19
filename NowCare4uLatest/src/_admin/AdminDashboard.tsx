@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAdminAuth } from './AdminContext';
-import { Users, UserCheck, UserX, Clock, TrendingUp } from 'lucide-react';
+import { Users, UserCheck, UserX, Clock } from 'lucide-react';
 
 interface DashboardStats {
   totalDoctors: number;
@@ -161,10 +161,10 @@ export default function AdminDashboard() {
                       {new Date(doctor.createdAt).toLocaleDateString()}
                     </span>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${doctor.isVerified
-                        ? 'bg-green-100 text-green-700'
-                        : doctor.rejectionReason
-                          ? 'bg-red-100 text-red-700'
-                          : 'bg-yellow-100 text-yellow-700'
+                      ? 'bg-green-100 text-green-700'
+                      : doctor.rejectionReason
+                        ? 'bg-red-100 text-red-700'
+                        : 'bg-yellow-100 text-yellow-700'
                       }`}>
                       {doctor.isVerified ? 'Verified' : doctor.rejectionReason ? 'Rejected' : 'Pending'}
                     </span>
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
@@ -203,7 +203,7 @@ export default function AdminDashboard() {
             <Users className="w-12 h-12 text-green-200" />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

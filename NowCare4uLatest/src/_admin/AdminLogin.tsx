@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from './AdminContext';
 
@@ -8,7 +8,14 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useAdminAuth();
+  const { login, admin } = useAdminAuth();
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (admin) {
+      navigate('/admin/dashboard');
+    }
+  }, [admin, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
