@@ -1,189 +1,105 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { Search, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAdminAuth } from './AdminContext';
-import {
-  User,
-  Mail,
-  Phone,
-  FileText,
-  Receipt,
-  Calendar,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Search,
-  AlertCircle
-} from 'lucide-react';
-
-interface Pharmacist {
-  _id: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  licenseNumber: string;
-  gstNumber: string;
-  isApproved: boolean;
-  isVerified: boolean;
-  rejectionReason?: string;
-  createdAt: string;
-  approvedAt?: string;
-  approvedBy?: string;
-}
+import { usePharmacistStore } from './store/pharmacist.store';
+import { pharmacistService } from './service/pharmacist.service';
+import type { Pharmacist } from './types/pharmacist.types';
+import PharmacistTable from './pharma/PharmacistTable';
+import PharmacistDetailsModal from './pharma/PharmacistDetailsModal';
+import AddPharmacistModal from './pharma/AddPharmacistModal';
 
 export default function PharmacistManagement() {
   const { token } = useAdminAuth();
-  const [pharmacists, setPharmacists] = useState<Pharmacist[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { pharmacists, loading, pagination, fetchPharmacists, updatePharmacist } = usePharmacistStore();
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedPharmacist, setSelectedPharmacist] = useState<Pharmacist | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  // Pagination & Filter State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'verified' | 'rejected'>('all');
+
+  const loadPharmacists = useCallback(() => {
+    if (!token) return;
+
+    const params: any = {
+      page: currentPage,
+      limit: pageSize,
+      sortBy: 'createdAt',
+      sortOrder: 'desc'
+    };
+
+    if (searchTerm) params.search = searchTerm;
+    if (statusFilter !== 'all') params.status = statusFilter;
+
+    fetchPharmacists(token, params);
+  }, [token, currentPage, pageSize, searchTerm, statusFilter, fetchPharmacists]);
 
   useEffect(() => {
     loadPharmacists();
-  }, [token]);
+  }, [loadPharmacists]);
 
-  const loadPharmacists = async () => {
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, pageSize]);
+
+  const handleApprove = async (pharmacistId: string) => {
     if (!token) return;
 
     try {
-      setLoading(true);
-      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/admin/pharmacists', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setPharmacists(data.pharmacists);
-      }
-    } catch (error) {
-      console.error('Failed to load pharmacists:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleApproval = async (pharmacistId: string, isApproved: boolean, rejectionReason?: string) => {
-    try {
       setActionLoading(pharmacistId);
-      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/pharmacists/${pharmacistId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ isApproved, rejectionReason }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setPharmacists(pharmacists.map(p =>
-          p._id === pharmacistId ? { ...p, isApproved, rejectionReason } : p
-        ));
-        alert(`Pharmacist ${isApproved ? 'approved' : 'rejected'} successfully!`);
-      } else {
-        alert('Failed to update status: ' + data.message);
-      }
+      await pharmacistService.updateApprovalStatus(token, pharmacistId, true);
+      updatePharmacist(pharmacistId, { isApproved: true });
+      alert('Pharmacist approved successfully!');
     } catch (error) {
-      console.error('Failed to update pharmacist status:', error);
-      alert('Failed to update status. Please try again.');
+      alert(error instanceof Error ? error.message : 'Failed to approve pharmacist');
     } finally {
       setActionLoading(null);
     }
   };
 
-  const handleVerification = async (pharmacistId: string, isVerified: boolean, rejectionReason?: string) => {
-    try {
-      setActionLoading(pharmacistId);
-      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/pharmacists/${pharmacistId}/verify`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ isVerified, rejectionReason }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setPharmacists(pharmacists.map(p =>
-          p._id === pharmacistId ? { ...p, isVerified, rejectionReason } : p
-        ));
-        alert(`Pharmacist ${isVerified ? 'verified' : 'verification rejected'} successfully!`);
-      } else {
-        alert('Failed to update verification: ' + data.message);
-      }
-    } catch (error) {
-      console.error('Failed to update pharmacist verification:', error);
-      alert('Failed to update verification. Please try again.');
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  const handleReject = (pharmacistId: string, type: 'approval' | 'verification') => {
+  const handleReject = async (pharmacistId: string, type: 'approval' | 'verification') => {
     const reason = prompt(`Enter rejection reason for ${type}:`);
-    if (reason) {
+    if (!reason || !token) return;
+
+    try {
+      setActionLoading(pharmacistId);
+
       if (type === 'approval') {
-        handleApproval(pharmacistId, false, reason);
+        await pharmacistService.updateApprovalStatus(token, pharmacistId, false, reason);
+        updatePharmacist(pharmacistId, { isApproved: false, rejectionReason: reason });
       } else {
-        handleVerification(pharmacistId, false, reason);
+        await pharmacistService.updateVerificationStatus(token, pharmacistId, false, reason);
+        updatePharmacist(pharmacistId, { isVerified: false, rejectionReason: reason });
       }
+
+      alert(`Pharmacist ${type} rejected successfully!`);
+    } catch (error) {
+      alert(error instanceof Error ? error.message : `Failed to reject ${type}`);
+    } finally {
+      setActionLoading(null);
     }
   };
 
-  const filteredPharmacists = pharmacists.filter(pharmacist =>
-    pharmacist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pharmacist.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pharmacist.licenseNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pharmacist.gstNumber.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleVerify = async (pharmacistId: string) => {
+    if (!token) return;
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+    try {
+      setActionLoading(pharmacistId);
+      await pharmacistService.updateVerificationStatus(token, pharmacistId, true);
+      updatePharmacist(pharmacistId, { isVerified: true });
+      alert('Pharmacist verified successfully!');
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Failed to verify pharmacist');
+    } finally {
+      setActionLoading(null);
+    }
   };
 
-  const getStatusBadge = (pharmacist: Pharmacist) => {
-    if (pharmacist.rejectionReason) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-          <XCircle className="w-3 h-3 mr-1" />
-          Rejected
-        </span>
-      );
-    }
-
-    if (pharmacist.isVerified && pharmacist.isApproved) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-          <CheckCircle className="w-3 h-3 mr-1" />
-          Verified & Approved
-        </span>
-      );
-    }
-
-    if (pharmacist.isApproved) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-          <CheckCircle className="w-3 h-3 mr-1" />
-          Approved
-        </span>
-      );
-    }
-
-    return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-        <Clock className="w-3 h-3 mr-1" />
-        Pending
-      </span>
-    );
-  };
-
-  if (loading) {
+  if (loading && pharmacists.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-lg text-gray-600">Loading pharmacists...</div>
@@ -193,177 +109,142 @@ export default function PharmacistManagement() {
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Pharmacist Management</h1>
-          <p className="text-gray-600">Manage pharmacist registrations and approvals ({pharmacists.length} total)</p>
+          <p className="text-gray-600">
+            Manage pharmacist registrations and approvals ({pagination?.total || 0} total)
+          </p>
         </div>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          <Plus className="w-5 h-5 mr-2" />
+          Add Pharmacist
+        </button>
       </div>
 
-      {/* Search Bar */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Search by name, email, license number, or GST number..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+      {/* Filters & Search */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Search */}
+          <div className="md:col-span-2 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search by name, email, license number, or GST number..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Status Filter */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as any)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="verified">Verified</option>
+            <option value="rejected">Rejected</option>
+          </select>
         </div>
       </div>
 
       {/* Pharmacist Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Pharmacist Details
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Contact Info
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  License & GST
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Registration Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredPharmacists.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
-                    {searchTerm ? 'No pharmacists found matching your search.' : 'No pharmacists registered yet.'}
-                  </td>
-                </tr>
-              ) : (
-                filteredPharmacists.map((pharmacist) => (
-                  <tr key={pharmacist._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <User className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{pharmacist.name}</div>
-                          <div className="text-sm text-gray-500">ID: {pharmacist._id.slice(-6)}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center text-sm text-gray-900">
-                          <Mail className="w-4 h-4 text-gray-400 mr-2" />
-                          {pharmacist.email}
-                        </div>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Phone className="w-4 h-4 text-gray-400 mr-2" />
-                          {pharmacist.phoneNumber}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center text-sm text-gray-900">
-                          <FileText className="w-4 h-4 text-gray-400 mr-2" />
-                          {pharmacist.licenseNumber}
-                        </div>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Receipt className="w-4 h-4 text-gray-400 mr-2" />
-                          {pharmacist.gstNumber}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="space-y-2">
-                        {getStatusBadge(pharmacist)}
-                        {pharmacist.rejectionReason && (
-                          <div className="flex items-start text-xs text-red-600">
-                            <AlertCircle className="w-3 h-3 mr-1 mt-0.5 flex-shrink-0" />
-                            <span>{pharmacist.rejectionReason}</span>
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center text-sm text-gray-500">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        {formatDate(pharmacist.createdAt)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col space-y-2">
-                        {!pharmacist.isApproved && !pharmacist.rejectionReason && (
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() => handleApproval(pharmacist._id, true)}
-                              disabled={actionLoading === pharmacist._id}
-                              className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
-                            >
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Approve
-                            </button>
-                            <button
-                              onClick={() => handleReject(pharmacist._id, 'approval')}
-                              disabled={actionLoading === pharmacist._id}
-                              className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
-                            >
-                              <XCircle className="w-3 h-3 mr-1" />
-                              Reject
-                            </button>
-                          </div>
-                        )}
+      <PharmacistTable
+        pharmacists={pharmacists}
+        onViewDetails={setSelectedPharmacist}
+        onApprove={handleApprove}
+        onReject={handleReject}
+        onVerify={handleVerify}
+        actionLoading={actionLoading}
+      />
 
-                        {pharmacist.isApproved && !pharmacist.isVerified && !pharmacist.rejectionReason && (
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() => handleVerification(pharmacist._id, true)}
-                              disabled={actionLoading === pharmacist._id}
-                              className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-                            >
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Verify
-                            </button>
-                            <button
-                              onClick={() => handleReject(pharmacist._id, 'verification')}
-                              disabled={actionLoading === pharmacist._id}
-                              className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
-                            >
-                              <XCircle className="w-3 h-3 mr-1" />
-                              Reject
-                            </button>
-                          </div>
-                        )}
+      {/* Pagination */}
+      {pagination && pagination.pages > 1 && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-700">
+                Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, pagination.total)} of {pagination.total} results
+              </span>
+              <select
+                value={pageSize}
+                onChange={(e) => setPageSize(Number(e.target.value))}
+                className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              >
+                <option value={10}>10 per page</option>
+                <option value={25}>25 per page</option>
+                <option value={50}>50 per page</option>
+              </select>
+            </div>
 
-                        {(pharmacist.isVerified || pharmacist.rejectionReason) && (
-                          <span className="text-xs text-gray-500">
-                            {pharmacist.isVerified ? 'Fully processed' : 'Action completed'}
-                          </span>
-                        )}
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
 
-                        {actionLoading === pharmacist._id && (
-                          <span className="text-xs text-blue-600">Processing...</span>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+              <div className="flex items-center space-x-1">
+                {[...Array(Math.min(5, pagination.pages))].map((_, i) => {
+                  let pageNum;
+                  if (pagination.pages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= pagination.pages - 2) {
+                    pageNum = pagination.pages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`px-3 py-1 rounded-lg ${currentPage === pageNum
+                        ? 'bg-blue-600 text-white'
+                        : 'border border-gray-300 hover:bg-gray-50'
+                        }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(pagination.pages, prev + 1))}
+                disabled={currentPage === pagination.pages}
+                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Modals */}
+      {showAddModal && <AddPharmacistModal onClose={() => {
+        setShowAddModal(false);
+        loadPharmacists(); // Refresh list after adding
+      }} />}
+      {selectedPharmacist && (
+        <PharmacistDetailsModal
+          pharmacist={selectedPharmacist}
+          onClose={() => setSelectedPharmacist(null)}
+        />
+      )}
     </div>
   );
 }

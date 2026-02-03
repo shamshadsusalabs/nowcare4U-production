@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://nowcare4-u-production-acbz.vercel.app',
+        target: 'http://localhost:5000',
         changeOrigin: true,
       },
     },

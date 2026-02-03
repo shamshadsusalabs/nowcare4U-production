@@ -60,7 +60,7 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/bookings', {
+      const response = await fetch('http://localhost:5000/api/doctors/bookings', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -130,8 +130,8 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 whitespace-nowrap ${activeTab === tab.id
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
                   }`}
               >
                 <Icon className="w-4 h-4" />
@@ -209,8 +209,8 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
                     </p>
                   </div>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                      booking.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
+                    booking.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                      'bg-gray-100 text-gray-800'
                     }`}>
                     {booking.status}
                   </span>
@@ -313,8 +313,8 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
                     </div>
                     <div className="text-right">
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                          booking.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                            'bg-gray-100 text-gray-800'
+                        booking.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
                         }`}>
                         {booking.status}
                       </span>

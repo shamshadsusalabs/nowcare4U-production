@@ -79,7 +79,7 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
     setLoading(true)
 
     try {
-      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/profile', {
+      const response = await fetch('http://localhost:5000/api/doctors/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -328,8 +328,8 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
                 onClick={() => addLanguage(lang)}
                 disabled={formData.languages.includes(lang)}
                 className={`px-3 py-1 rounded-full text-sm transition-colors duration-200 ${formData.languages.includes(lang)
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
               >
                 {lang}

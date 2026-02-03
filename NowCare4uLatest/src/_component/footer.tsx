@@ -7,12 +7,13 @@ import {
   Phone,
   MapPin,
   ExternalLink,
+  Mail,
   Shield,
   Award,
   Users,
- 
+
   ArrowRight,
- 
+
 } from "lucide-react"
 
 const Footer = () => {
@@ -37,9 +38,9 @@ const Footer = () => {
   ]
 
   const footerLinks = [
-    "Terms And Condition", 
-    "Privacy Policy", 
-    "Return And Refund Policy", 
+    "Terms And Condition",
+    "Privacy Policy",
+    "Return And Refund Policy",
     "Cancellation Policy"
   ]
 
@@ -185,7 +186,7 @@ const Footer = () => {
                   <MapPin className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-gray-600 leading-relaxed">
-                      Corporate address: Door No.72/6, Haily Mandi, Gurgaon, Haryana 122504
+                      Corporate address: Magnum Tower 1, 8th Floor, Golf Course Ext Rd, Sector 58, Gurugram, Haryana 122011
                     </p>
                   </div>
                 </div>
@@ -193,18 +194,17 @@ const Footer = () => {
                 <div className="flex items-center space-x-3 p-3 rounded-xl bg-white border border-gray-200">
                   <Phone className="w-5 h-5 text-green-500" />
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">+91-8595591496</p>
-                    <p className="text-sm text-gray-600">0124-4147286</p>
+                    <p className="text-sm text-gray-600 font-medium">+91 8595591496</p>
                   </div>
                 </div>
 
-                <a 
-                  href="#"
+                <a
+                  href="mailto:contact@susalabs.com"
                   className="flex items-center space-x-3 p-3 rounded-xl bg-white border border-gray-200 hover:bg-blue-50 transition-colors duration-200"
                 >
-                  <ExternalLink className="w-5 h-5 text-blue-500" />
+                  <Mail className="w-5 h-5 text-blue-500" />
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Contact Us/Raise a Complaint</p>
+                    <p className="text-sm text-gray-600 font-medium">contact@susalabs.com</p>
                   </div>
                 </a>
               </div>

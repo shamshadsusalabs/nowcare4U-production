@@ -3,25 +3,28 @@
 import type React from "react"
 import { useState } from "react"
 import { Helmet } from "react-helmet-async"
-import { Mail, User, Phone, Send, Briefcase, CheckCircle, FileText, Building, Users, Award } from "lucide-react"
+import { User, Phone, Send, Briefcase, CheckCircle, FileText, Building, Users, Award } from "lucide-react"
 
 interface FormData {
-  email: string
   name: string
-  phone: string
+  number: string
+  education: string
+  address: string
   resume: File | null
 }
 
 const CareerForm = () => {
   const [formData, setFormData] = useState<FormData>({
-    email: "",
     name: "",
-    phone: "",
+    number: "",
+    education: "",
+    address: "",
     resume: null,
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string>("")
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target
@@ -30,29 +33,108 @@ const CareerForm = () => {
     } else {
       setFormData({ ...formData, [name]: value })
     }
+    // Clear error when user starts typing
+    if (error) setError("")
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError("")
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    console.group("🚀 Career Form Submission Started")
+    console.log("📋 Form Data:", {
+      name: formData.name,
+      phone: formData.number,  // Frontend uses 'number' but backend expects 'phone'
+      education: formData.education,
+      address: formData.address,
+      resumeFileName: formData.resume?.name,
+      resumeSize: formData.resume?.size,
+      resumeType: formData.resume?.type,
+    })
 
-    console.log(formData)
-    setIsSubmitting(false)
-    setIsSubmitted(true)
+    try {
+      // Create FormData object for file upload
+      const formDataToSend = new FormData()
+      formDataToSend.append("name", formData.name)
+      formDataToSend.append("phone", formData.number)  // Backend expects 'phone'
+      formDataToSend.append("education", formData.education)
+      formDataToSend.append("address", formData.address)
+      if (formData.resume) {
+        formDataToSend.append("resume", formData.resume)
+      }
 
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setFormData({
-        email: "",
-        name: "",
-        phone: "",
-        resume: null,
+      console.log("📤 Sending request to: https://susaweb-418006.el.r.appspot.com/Resume/resume")
+      console.log("📦 FormData entries:")
+      for (let [key, value] of formDataToSend.entries()) {
+        if (value instanceof File) {
+          console.log(`  - ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`)
+        } else {
+          console.log(`  - ${key}: ${value}`)
+        }
+      }
+
+      // Send to backend API
+      const response = await fetch("https://susaweb-418006.el.r.appspot.com/Resume/resume", {
+        method: "POST",
+        body: formDataToSend,
       })
-    }, 3000)
+
+      console.log("📨 Response Status:", response.status, response.statusText)
+      console.log("📨 Response Headers:", {
+        contentType: response.headers.get("content-type"),
+        contentLength: response.headers.get("content-length"),
+        server: response.headers.get("server"),
+      })
+
+      // Clone response to read it twice
+      const responseClone = response.clone()
+
+      if (!response.ok) {
+        let errorData
+        try {
+          errorData = await response.json()
+          console.error("❌ Error Response Data:", errorData)
+        } catch (parseError) {
+          const errorText = await responseClone.text()
+          console.error("❌ Error Response (Raw Text):", errorText)
+          errorData = { message: "Failed to submit application" }
+        }
+        throw new Error(errorData.message || "Failed to submit application")
+      }
+
+      const result = await response.json()
+      console.log("✅ SUCCESS! Response Data:", result)
+      console.log("✅ Full Response Object:", JSON.stringify(result, null, 2))
+      console.groupEnd()
+
+      setIsSubmitted(true)
+
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setIsSubmitted(false)
+        setFormData({
+          name: "",
+          number: "",
+          education: "",
+          address: "",
+          resume: null,
+        })
+        // Reset file input
+        const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
+        if (fileInput) fileInput.value = ""
+      }, 3000)
+    } catch (err: any) {
+      console.error("❌ ERROR submitting application:")
+      console.error("❌ Error Type:", err.constructor.name)
+      console.error("❌ Error Message:", err.message)
+      console.error("❌ Error Stack:", err.stack)
+      console.error("❌ Full Error Object:", err)
+      console.groupEnd()
+      setError(err.message || "Failed to submit application. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (isSubmitted) {
@@ -76,10 +158,9 @@ const CareerForm = () => {
             <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
               <CheckCircle className="w-10 h-10 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Application Submitted!</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Thank You for Applying!</h2>
             <p className="text-gray-600 mb-6">
-              Thank you for your interest in joining our team. We'll review your application and get back to you within
-              2-3 business days.
+              Your application has been submitted successfully. Our team will contact you soon regarding the next steps.
             </p>
             <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
               <div className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full animate-pulse"></div>
@@ -232,6 +313,12 @@ const CareerForm = () => {
                   <p className="text-gray-600">Join our innovative healthcare team</p>
                 </div>
 
+                {error && (
+                  <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                    {error}
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* Name Field */}
                   <div className="relative">
@@ -250,16 +337,37 @@ const CareerForm = () => {
                     </div>
                   </div>
 
-                  {/* Email Field */}
+                  {/* Education Field */}
                   <div className="relative">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Education</label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <select
+                        name="education"
+                        value={formData.education}
+                        onChange={(e) => setFormData({ ...formData, education: e.target.value })}
+                        className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                        required
+                      >
+                        <option value="">Select your education</option>
+                        <option value="High School">High School</option>
+                        <option value="Bachelor's Degree">Bachelor's Degree</option>
+                        <option value="Master's Degree">Master's Degree</option>
+                        <option value="PhD">PhD</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Mobile Number Field */}
+                  <div className="relative">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Mobile Number</label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
-                        type="email"
-                        name="email"
-                        placeholder="your.email@example.com"
-                        value={formData.email}
+                        type="tel"
+                        name="number"
+                        placeholder="+91 98765 43210"
+                        value={formData.number}
                         onChange={handleChange}
                         className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
                         required
@@ -267,18 +375,17 @@ const CareerForm = () => {
                     </div>
                   </div>
 
-                  {/* Phone Field */}
+                  {/* Address Field */}
                   <div className="relative">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Mobile Number</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
-                        type="tel"
-                        name="phone"
-                        placeholder="+91 98765 43210"
-                        value={formData.phone}
+                        type="text"
+                        name="address"
+                        placeholder="Enter your complete address"
+                        value={formData.address}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                        className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
                         required
                       />
                     </div>

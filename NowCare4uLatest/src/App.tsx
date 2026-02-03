@@ -7,42 +7,46 @@ import Hero from './_component/hero'
 import Expert from './_component/expert'
 import Calculator from './_component/calculator'
 import Career from './_component/career'
+import ContactUs from './_component/ContactUs'
 import Footer from './_component/footer'
 
 // Lazy load
 const Rnatherapy = lazy(() => import('./_component/rnatherapy'))
 const Neurology = lazy(() => import('./_component/neurology'))
 const Ourservice = lazy(() => import('./_component/ourservice'))
-const Mentalheath = lazy(() => import('./_mentalHealthprogram/mentalheath'))
-const Sickreason = lazy(() => import('./_mentalHealthprogram/sickreason'))
-const Mentallwellness = lazy(() => import('./_mentalHealthprogram/mentallwellness'))
-const Systemmatic = lazy(() => import('./_mentalHealthprogram/systemmatic-procedure'))
+const Mentalheath = lazy(() => import('./_component/_mentalHealthprogram/mentalheath'))
+const Sickreason = lazy(() => import('./_component/_mentalHealthprogram/sickreason'))
+const Mentallwellness = lazy(() => import('./_component/_mentalHealthprogram/mentallwellness'))
+const Systemmatic = lazy(() => import('./_component/_mentalHealthprogram/systemmatic-procedure'))
 const Blog = lazy(() => import('./blog/blog'))
 const Blogdetails = lazy(() => import('./blog/blog-details'))
-const AdhdTest = lazy(() => import('./_calculator/adhdTest'))
-const Bedwetting = lazy(() => import('./_calculator/bedwettingTest'))
-const ChildgrowthTest = lazy(() => import('./_calculator/childgrowthTest'))
-const HeightPrediction = lazy(() => import('./_calculator/heightPredictionTest'))
-const PersonalityTest = lazy(() => import('./_calculator/personalityTest'))
-const Cognitivetest = lazy(() => import('./_calculator/congnitiveTest/CognitiveTestApp'))
-const CognitiveRecords = lazy(() => import('./_calculator/congnitiveTest/CognitiveRecords'))
-const KickCounterApp = lazy(() => import('./_calculator/KickCounterApp'))
-const DiabetesCalcApp = lazy(() => import('./_calculator/diabetes/DiabetesCalcApp'))
-const DiabetesRecords = lazy(() => import('./_calculator/diabetes/DiabetesRecords'))
-const PregnancyWeightApp = lazy(() => import('./_calculator/pregnancyWeight/PregnancyWeightApp'))
-const PregnancyWeightRecords = lazy(() => import('./_calculator/pregnancyWeight/PregnancyWeightRecords'))
-const BMICalcApp = lazy(() => import('./_calculator/bmi/BMICalcApp'))
+const AdhdTest = lazy(() => import('./_component/_calculator/adhdTest'))
+const Bedwetting = lazy(() => import('./_component/_calculator/bedwettingTest'))
+const ChildgrowthTest = lazy(() => import('./_component/_calculator/childgrowthTest'))
+const HeightPrediction = lazy(() => import('./_component/_calculator/heightPredictionTest'))
+const PersonalityTest = lazy(() => import('./_component/_calculator/personalityTest'))
+const Cognitivetest = lazy(() => import('./_component/_calculator/congnitiveTest/CognitiveTestApp'))
+const CognitiveRecords = lazy(() => import('./_component/_calculator/congnitiveTest/CognitiveRecords'))
+const KickCounterApp = lazy(() => import('./_component/_calculator/KickCounterApp'))
+const DiabetesCalcApp = lazy(() => import('./_component/_calculator/diabetes/DiabetesCalcApp'))
+const DiabetesRecords = lazy(() => import('./_component/_calculator/diabetes/DiabetesRecords'))
+const PregnancyWeightApp = lazy(() => import('./_component/_calculator/pregnancyWeight/PregnancyWeightApp'))
+const PregnancyWeightRecords = lazy(() => import('./_component/_calculator/pregnancyWeight/PregnancyWeightRecords'))
+const BMICalcApp = lazy(() => import('./_component/_calculator/bmi/BMICalcApp'))
 const AdminLogin = lazy(() => import('./_admin/AdminLogin'))
 const AdminLayout = lazy(() => import('./_admin/AdminLayout'))
 const AdminDashboard = lazy(() => import('./_admin/AdminDashboard'))
 const DoctorManagement = lazy(() => import('./_admin/DoctorManagement'))
 const BlogManagement = lazy(() => import('./_admin/BlogManagement'))
 const PharmacistManagement = lazy(() => import('./_admin/PharmacistManagement'))
+const ProductManagement = lazy(() => import('./_admin/product/ProductManagement'))
+const LabManagement = lazy(() => import('./_admin/LabManagement'))
 const Doctor = lazy(() => import('./pages/doctor'))
 const Pharmacist = lazy(() => import('./pages/pharmacist'))
-const OvulationCalculator = lazy(() => import('./_calculator/ovulation/OvulationCalculator'))
-const OvulationRecord = lazy(() => import('./_calculator/ovulation/OvulationRecord'))
-const KickRecords = lazy(() => import('./_calculator/kick/KickRecords'))
+const Lab = lazy(() => import('./pages/lab'))
+const OvulationCalculator = lazy(() => import('./_component/_calculator/ovulation/OvulationCalculator'))
+const OvulationRecord = lazy(() => import('./_component/_calculator/ovulation/OvulationRecord'))
+const KickRecords = lazy(() => import('./_component/_calculator/kick/KickRecords'))
 const PhoneLogin = lazy(() => import('./auth/PhoneLogin'))
 
 const Addblog = lazy(() => import('./_admin/addblog'))
@@ -96,6 +100,10 @@ function App() {
               <Career />
             </Suspense>
           }
+        />
+        <Route
+          path="/contact"
+          element={<ContactUs />}
         />
         <Route
           path="/calculators"
@@ -298,6 +306,14 @@ function App() {
           }
         />
         <Route
+          path="/lab"
+          element={
+            <Suspense fallback={<div className="text-center p-10">Loading...</div>}>
+              <Lab />
+            </Suspense>
+          }
+        />
+        <Route
           path="/admin/login"
           element={
             <Suspense fallback={<div className="text-center p-10">Loading...</div>}>
@@ -319,6 +335,8 @@ function App() {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="doctors" element={<DoctorManagement />} />
           <Route path="pharmacists" element={<PharmacistManagement />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="labs" element={<LabManagement />} />
           <Route path="blogs" element={<BlogManagement />} />
           <Route path="addblog" element={<Addblog />} />
         </Route>

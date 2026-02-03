@@ -40,14 +40,14 @@ export default function AdminDashboard() {
 
     try {
       // Load stats
-      const statsRes = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/admin/dashboard/stats', {
+      const statsRes = await fetch('http://localhost:5000/api/admin/dashboard/stats', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const statsData = await statsRes.json();
       setStats(statsData);
 
       // Load recent doctors
-      const doctorsRes = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/admin/doctors', {
+      const doctorsRes = await fetch('http://localhost:5000/api/admin/doctors', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const doctorsData = await doctorsRes.json();

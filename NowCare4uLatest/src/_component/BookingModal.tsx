@@ -54,7 +54,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
     try {
       console.log('Fetching slots for doctor ID:', doctor._id)
       // Use the correct API endpoint for public available slots
-      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/public/doctors/${doctor._id}/available-slots`)
+      const response = await fetch(`http://localhost:5000/api/public/doctors/${doctor._id}/available-slots`)
       const data = await response.json()
       console.log('Available slots response:', data)
       if (data.success) {
@@ -86,7 +86,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
 
     setLoading(true)
     try {
-      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/bookings', {
+      const response = await fetch('http://localhost:5000/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -194,10 +194,10 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
                             onClick={() => !slot.isBooked && setSelectedSlot(slot)}
                             disabled={slot.isBooked}
                             className={`p-3 rounded-lg border transition-all duration-200 ${slot.isBooked
-                                ? 'bg-red-100 text-red-700 border-red-200 cursor-not-allowed opacity-60'
-                                : selectedSlot?._id === slot._id
-                                  ? 'bg-blue-600 text-white border-blue-600'
-                                  : 'bg-green-50 hover:bg-green-100 border-green-200 hover:border-green-300 text-green-800'
+                              ? 'bg-red-100 text-red-700 border-red-200 cursor-not-allowed opacity-60'
+                              : selectedSlot?._id === slot._id
+                                ? 'bg-blue-600 text-white border-blue-600'
+                                : 'bg-green-50 hover:bg-green-100 border-green-200 hover:border-green-300 text-green-800'
                               }`}
                           >
                             <div className="text-sm font-medium">{slot.startTime}</div>

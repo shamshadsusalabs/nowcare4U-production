@@ -16,6 +16,7 @@ const diabetesRoutes = require('./routes/diabetesRoutes');
 const pregnancyWeightRoutes = require('./routes/pregnancyWeightRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const pharmacistRoutes = require('./routes/pharmacistRoutes');
+const productRoutes = require('./routes/productRoutes');
 const app = express();
 
 // Enable CORS properly
@@ -50,6 +51,10 @@ app.use('/api/diabetes', diabetesRoutes);
 app.use('/api/pregnancy-weight', pregnancyWeightRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/pharmacist', pharmacistRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/invoices', require('./routes/productInvoiceRoutes'));
+app.use('/api/labs', require('./routes/labRoutes'));
+app.use('/api/lab-services', require('./routes/labServiceRoutes'));
 // Error handling
 app.use(errorHandler);
 

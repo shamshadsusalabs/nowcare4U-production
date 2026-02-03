@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { buildApiUrl } from '../config/api';
 
 interface Admin {
   id: string;
@@ -25,7 +26,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const savedToken = localStorage.getItem('adminToken');
     const savedAdmin = localStorage.getItem('adminData');
-    
+
     if (savedToken && savedAdmin) {
       setToken(savedToken);
       setAdmin(JSON.parse(savedAdmin));
@@ -34,7 +35,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await fetch('/api/admin/login', {
+    const response = await fetch(buildApiUrl('admin/login'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -42,8 +43,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({ email, password }),
     });
 
+
     const data = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(data.message || 'Login failed');
     }

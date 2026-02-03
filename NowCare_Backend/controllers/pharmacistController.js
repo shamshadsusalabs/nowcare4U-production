@@ -9,40 +9,63 @@ const generateToken = (id) => {
 // Pharmacist signup/registration
 exports.signup = async (req, res, next) => {
   try {
-    const { name, email, phoneNumber, password, licenseNumber, gstNumber } = req.body;
-    
-    // Validate required fields
-    if (!name || !email || !phoneNumber || !password || !licenseNumber || !gstNumber) {
-      return res.status(400).json({ 
+    const { name, email, phoneNumber, password, licenseNumber, gstNumber, aadharNumber, panNumber } = req.body;
+
+    // Check if files are uploaded
+    if (!req.files || !req.files.aadharFile || !req.files.panFile || !req.files.licenseFile || !req.files.gstFile) {
+      return res.status(400).json({
         success: false,
-        message: 'All fields are required (name, email, phone number, password, license number, GST number)' 
+        message: 'All documents are required (Aadhar, PAN, License, GST)'
+      });
+    }
+
+    // Extract file URLs from Cloudinary
+    const aadharFile = req.files.aadharFile[0].path;
+    const panFile = req.files.panFile[0].path;
+    const licenseFile = req.files.licenseFile[0].path;
+    const gstFile = req.files.gstFile[0].path;
+
+    // Validate required fields
+    if (!name || !email || !phoneNumber || !password || !licenseNumber || !gstNumber || !aadharNumber || !panNumber) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fields are required (name, email, phone, password, license number, GST number, Aadhar number, PAN number)'
       });
     }
 
     // Check if pharmacist already exists with email
     const existingPharmacistByEmail = await Pharmacist.findOne({ email });
     if (existingPharmacistByEmail) {
-      return res.status(409).json({ 
+      return res.status(409).json({
         success: false,
-        message: 'Pharmacist with this email already exists' 
+        message: 'Pharmacist with this email already exists'
       });
     }
 
     // Check if pharmacist already exists with license number
     const existingPharmacistByLicense = await Pharmacist.findOne({ licenseNumber: licenseNumber.toUpperCase() });
     if (existingPharmacistByLicense) {
-      return res.status(409).json({ 
+      return res.status(409).json({
         success: false,
-        message: 'Pharmacist with this license number already exists' 
+        message: 'Pharmacist with this license number already exists'
       });
     }
 
     // Check if pharmacist already exists with GST number
     const existingPharmacistByGST = await Pharmacist.findOne({ gstNumber: gstNumber.toUpperCase() });
     if (existingPharmacistByGST) {
-      return res.status(409).json({ 
+      return res.status(409).json({
         success: false,
-        message: 'Pharmacist with this GST number already exists' 
+        message: 'Pharmacist with this GST number already exists'
+      });
+    }
+
+    // Check if pharmacist already exists with PAN number
+    const existingPharmacistByPAN = await Pharmacist.findOne({ panNumber: panNumber.toUpperCase() });
+    if (existingPharmacistByPAN) {
+      return res.status(409).json({
+        success: false,
+        message: 'Pharmacist with this PAN number already exists'
       });
     }
 
@@ -54,6 +77,12 @@ exports.signup = async (req, res, next) => {
       password, // Will be hashed by pre-save middleware
       licenseNumber: licenseNumber.toUpperCase().trim(),
       gstNumber: gstNumber.toUpperCase().trim(),
+      aadharNumber: aadharNumber.trim(),
+      panNumber: panNumber.toUpperCase().trim(),
+      aadharFile,
+      panFile,
+      licenseFile,
+      gstFile,
       isApproved: false,
       isVerified: false
     });
@@ -74,6 +103,8 @@ exports.signup = async (req, res, next) => {
         phoneNumber: pharmacist.phoneNumber,
         licenseNumber: pharmacist.licenseNumber,
         gstNumber: pharmacist.gstNumber,
+        aadharNumber: pharmacist.aadharNumber,
+        panNumber: pharmacist.panNumber,
         isApproved: pharmacist.isApproved,
         isVerified: pharmacist.isVerified
       }
@@ -95,29 +126,29 @@ exports.signup = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    
+
     if (!email || !password) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: 'Email and password are required' 
+        message: 'Email and password are required'
       });
     }
 
     // Find pharmacist by email
     const pharmacist = await Pharmacist.findOne({ email: email.toLowerCase() });
     if (!pharmacist) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         success: false,
-        message: 'Invalid credentials' 
+        message: 'Invalid credentials'
       });
     }
 
     // Check password
     const isPasswordCorrect = await pharmacist.comparePassword(password);
     if (!isPasswordCorrect) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         success: false,
-        message: 'Invalid credentials' 
+        message: 'Invalid credentials'
       });
     }
 
@@ -157,14 +188,51 @@ exports.getProfile = async (req, res, next) => {
   try {
     const pharmacist = await Pharmacist.findById(req.pharmacist.id).select('-password');
     if (!pharmacist) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Pharmacist not found' 
+        message: 'Pharmacist not found'
       });
     }
-    
+
     res.json({
       success: true,
+      pharmacist
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update pharmacist profile
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const { name, phoneNumber } = req.body;
+    const pharmacist = await Pharmacist.findById(req.pharmacist.id);
+
+    if (!pharmacist) {
+      return res.status(404).json({
+        success: false,
+        message: 'Pharmacist not found'
+      });
+    }
+
+    // Update text fields if provided
+    if (name) pharmacist.name = name.trim();
+    if (phoneNumber) pharmacist.phoneNumber = phoneNumber.trim();
+
+    // Update files if uploaded
+    if (req.files) {
+      if (req.files.licenseFile) pharmacist.licenseFile = req.files.licenseFile[0].path;
+      if (req.files.gstFile) pharmacist.gstFile = req.files.gstFile[0].path;
+      if (req.files.aadharFile) pharmacist.aadharFile = req.files.aadharFile[0].path;
+      if (req.files.panFile) pharmacist.panFile = req.files.panFile[0].path;
+    }
+
+    await pharmacist.save();
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
       pharmacist
     });
   } catch (error) {

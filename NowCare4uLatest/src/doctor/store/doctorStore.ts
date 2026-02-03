@@ -54,7 +54,7 @@ interface DoctorActions {
   setError: (error: string | null) => void
 }
 
-const API_BASE = 'https://nowcare4-u-production-acbz.vercel.app/api'
+const API_BASE = 'http://localhost:5000/api'
 
 export const useDoctorStore = create<DoctorState & DoctorActions>()(
   persist(

@@ -42,6 +42,36 @@ const pharmacistSchema = new mongoose.Schema({
     uppercase: true,
     match: [/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/, 'Please enter a valid GST number']
   },
+  aadharNumber: {
+    type: String,
+    trim: true,
+    match: [/^[0-9]{12}$/, 'Please enter a valid 12-digit Aadhar number']
+  },
+  panNumber: {
+    type: String,
+    unique: true,
+    sparse: true, // Allow null values for unique index
+    trim: true,
+    uppercase: true,
+    match: [/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Please enter a valid PAN number']
+  },
+  // Document Files (Cloudinary URLs)
+  aadharFile: {
+    type: String,
+    trim: true
+  },
+  panFile: {
+    type: String,
+    trim: true
+  },
+  licenseFile: {
+    type: String,
+    trim: true
+  },
+  gstFile: {
+    type: String,
+    trim: true
+  },
   isApproved: {
     type: Boolean,
     default: false
@@ -75,9 +105,9 @@ const pharmacistSchema = new mongoose.Schema({
 });
 
 // Hash password before saving
-pharmacistSchema.pre('save', async function(next) {
+pharmacistSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  
+
   try {
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
@@ -88,7 +118,7 @@ pharmacistSchema.pre('save', async function(next) {
 });
 
 // Compare password method
-pharmacistSchema.methods.comparePassword = async function(candidatePassword) {
+pharmacistSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
@@ -96,6 +126,8 @@ pharmacistSchema.methods.comparePassword = async function(candidatePassword) {
 pharmacistSchema.index({ email: 1 });
 pharmacistSchema.index({ licenseNumber: 1 });
 pharmacistSchema.index({ gstNumber: 1 });
+pharmacistSchema.index({ aadharNumber: 1 });
+pharmacistSchema.index({ panNumber: 1 });
 pharmacistSchema.index({ isApproved: 1, isVerified: 1 });
 
 module.exports = mongoose.model('Pharmacist', pharmacistSchema);

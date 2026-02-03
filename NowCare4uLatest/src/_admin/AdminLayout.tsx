@@ -12,12 +12,15 @@ import {
   Bell,
   Search,
   Pill,
+  Package,
 } from 'lucide-react';
 
 const sidebarItems = [
   { name: 'Dashboard', icon: Home, path: '/admin/dashboard' },
   { name: 'Doctors', icon: Users, path: '/admin/doctors' },
   { name: 'Pharmacists', icon: Pill, path: '/admin/pharmacists' },
+  { name: 'Products', icon: Package, path: '/admin/products' },
+  { name: 'Labs', icon: FileText, path: '/admin/labs' },
   { name: 'Blog Management', icon: FileText, path: '/admin/blogs' },
   { name: 'Add Blog', icon: FileText, path: '/admin/addblog' },
   // { name: 'Settings', icon: Settings, path: '/admin/settings' },

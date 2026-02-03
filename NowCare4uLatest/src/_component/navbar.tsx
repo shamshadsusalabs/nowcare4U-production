@@ -45,6 +45,7 @@ const Navbar = (): JSX.Element => {
     { name: 'Blog', path: '/blog' },
     { name: 'Mental Health', path: '/mental-health' },
     { name: 'Career', path: '/career' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   const researchItems = [
