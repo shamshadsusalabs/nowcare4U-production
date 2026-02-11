@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useUser } from '../../auth/UserContext';
+import { useUser } from '../../../auth/UserContext';
 import CognitiveTest from './CognitiveTest';
 
 export default function CognitiveTestApp() {

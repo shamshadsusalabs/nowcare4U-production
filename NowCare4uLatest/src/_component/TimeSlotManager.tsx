@@ -32,7 +32,7 @@ const TimeSlotManager = ({ token }: TimeSlotManagerProps) => {
 
   const fetchTimeSlots = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/doctors/time-slots', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/time-slots', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {
@@ -49,7 +49,7 @@ const TimeSlotManager = ({ token }: TimeSlotManagerProps) => {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/doctors/time-slots', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/time-slots', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const TimeSlotManager = ({ token }: TimeSlotManagerProps) => {
 
   const toggleSlotAvailability = async (slotId: string, currentAvailability: boolean) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/doctors/time-slots/${slotId}`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/doctors/time-slots/${slotId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useUser } from '../../auth/UserContext';
+import { useUser } from '../../../auth/UserContext';
 import BMICalc from './BMICalc';
 
 export default function BMICalcApp() {

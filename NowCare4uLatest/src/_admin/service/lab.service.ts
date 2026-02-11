@@ -1,6 +1,6 @@
 import type { Lab, LabFormData, LabTest } from '../types/lab.types';
 
-const API_BASE = 'http://localhost:5000/api/admin';
+const API_BASE = 'https://nowcare4-u-production-acbz.vercel.app/api/admin';
 
 export const labService = {
     // Get all labs with pagination and filters

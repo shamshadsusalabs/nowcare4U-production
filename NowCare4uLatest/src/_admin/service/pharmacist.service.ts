@@ -1,6 +1,6 @@
 import type { Pharmacist, PharmacistFormData } from '../types/pharmacist.types';
 
-const API_BASE = 'http://localhost:5000/api/admin';
+const API_BASE = 'https://nowcare4-u-production-acbz.vercel.app/api/admin';
 
 export const pharmacistService = {
     // Get all pharmacists with pagination and filters

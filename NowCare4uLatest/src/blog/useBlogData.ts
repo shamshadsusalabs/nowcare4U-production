@@ -58,7 +58,7 @@ export const useBlogData = () => {
         })
 
 
-        const response = await fetch(`http://localhost:5000/api/blogs/getAll?${queryParams}`)
+        const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/blogs/getAll?${queryParams}`)
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
@@ -97,7 +97,7 @@ export const useBlogData = () => {
 
       try {
 
-        const response = await fetch("http://localhost:5000/api/blogs/getAll?type=featured&limit=4")
+        const response = await fetch("https://nowcare4-u-production-acbz.vercel.app/api/blogs/getAll?type=featured&limit=4")
         const data: BlogResponse = await response.json()
 
         if (data.success) {

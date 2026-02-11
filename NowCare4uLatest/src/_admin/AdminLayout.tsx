@@ -13,6 +13,7 @@ import {
   Search,
   Pill,
   Package,
+  BookOpen,
 } from 'lucide-react';
 
 const sidebarItems = [
@@ -23,7 +24,8 @@ const sidebarItems = [
   { name: 'Labs', icon: FileText, path: '/admin/labs' },
   { name: 'Blog Management', icon: FileText, path: '/admin/blogs' },
   { name: 'Add Blog', icon: FileText, path: '/admin/addblog' },
-  // { name: 'Settings', icon: Settings, path: '/admin/settings' },
+  // Unified Program Management
+  { name: 'Programs', icon: BookOpen, path: '/admin/programs' },
 ];
 
 export default function AdminLayout() {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUser } from '../../auth/UserContext';
+import { useUser } from '../../../auth/UserContext';
 
 interface RecordItem {
   _id: string;
@@ -43,7 +43,7 @@ export default function DiabetesRecords() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/diabetes/records', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/diabetes/records', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -59,7 +59,7 @@ export default function DiabetesRecords() {
   const remove = async (id: string) => {
     if (!token) return;
     try {
-      const res = await fetch(`/api/diabetes/records/${id}`, {
+      const res = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/diabetes/records/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -75,7 +75,7 @@ export default function DiabetesRecords() {
     if (!token) return;
     if (!confirm('Delete all diabetes records?')) return;
     try {
-      const res = await fetch('/api/diabetes/records', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/diabetes/records', {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -112,7 +112,7 @@ export default function DiabetesRecords() {
               <div>
                 <div className="font-medium">DM: {it.results.dm}% • PDM: {it.results.pdm}%</div>
                 <div className="text-sm text-gray-500">{new Date(it.createdAt).toLocaleString()}</div>
-                <div className="text-xs text-gray-500 mt-1">Waist: {['<90','90-100','>100'][it.inputs.waist]} • Activity: {['Sedentary','Light','Moderate','High'][it.inputs.activity]}</div>
+                <div className="text-xs text-gray-500 mt-1">Waist: {['<90', '90-100', '>100'][it.inputs.waist]} • Activity: {['Sedentary', 'Light', 'Moderate', 'High'][it.inputs.activity]}</div>
               </div>
               <button onClick={() => remove(it._id)} className="px-3 py-2 rounded bg-red-50 text-red-600 hover:bg-red-100">Delete</button>
             </div>

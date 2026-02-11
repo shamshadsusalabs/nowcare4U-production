@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../auth/UserContext';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Checkbox } from '../components/ui/checkbox';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
-import { RadioGroup, RadioGroupItem } from '../components/ui/radio-group';
-import { Label } from '../components/ui/label';
+import { useUser } from '../../auth/UserContext';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Checkbox } from '../../components/ui/checkbox';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../components/ui/dialog';
+import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
+import { Label } from '../../components/ui/label';
 import { Plus, Share2, ChevronDown, ChevronUp } from 'lucide-react';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../components/ui/collapsible';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../../components/ui/collapsible';
 
 interface KickEntry {
   display: string;
@@ -47,7 +47,7 @@ const KickCounter: React.FC = () => {
   const loadUserData = async () => {
     try {
       if (!token) return;
-      const res = await fetch('/api/kick-counter/data', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/kick-counter/data', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,7 +68,7 @@ const KickCounter: React.FC = () => {
       if (!token) return;
       const newName = nameInput.trim();
       if (!newName) return;
-      await fetch('/api/kick-counter/data', {
+      await fetch('https://nowcare4-u-production-acbz.vercel.app/api/kick-counter/data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const KickCounter: React.FC = () => {
   const saveCurrent = async () => {
     try {
       if (!token) return;
-      await fetch('/api/kick-counter/data', {
+      await fetch('https://nowcare4-u-production-acbz.vercel.app/api/kick-counter/data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ const KickCounter: React.FC = () => {
   const loadNotificationSettings = async () => {
     try {
       if (!token) return;
-      const res = await fetch('/api/kick-counter/notifications', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/kick-counter/notifications', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -190,7 +190,7 @@ const KickCounter: React.FC = () => {
       }
 
       // Save notifications to backend
-      await fetch('/api/kick-counter/notifications', {
+      await fetch('https://nowcare4-u-production-acbz.vercel.app/api/kick-counter/notifications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -210,7 +210,7 @@ const KickCounter: React.FC = () => {
     try {
       if (!token) return;
 
-      await fetch('/api/kick-counter/notifications', {
+      await fetch('https://nowcare4-u-production-acbz.vercel.app/api/kick-counter/notifications', {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -228,7 +228,7 @@ const KickCounter: React.FC = () => {
     try {
       if (!token) return;
 
-      const res = await fetch('/api/kick-counter/share-pdf', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/kick-counter/share-pdf', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -252,7 +252,7 @@ const KickCounter: React.FC = () => {
     setShareDialogOpen(false);
   };
 
-  
+
 
   // Removed unused getFilteredList function
 
@@ -316,7 +316,7 @@ const KickCounter: React.FC = () => {
             </Dialog>
           </div>
         </CardHeader>
-        
+
         <CardContent className="space-y-6">
           {/* Welcome Message */}
           <div className="text-left">
@@ -354,7 +354,7 @@ const KickCounter: React.FC = () => {
               <Plus className="w-12 h-12" />
             </Button>
             <p className="text-sm text-gray-600">Tap to add count</p>
-            
+
             <div className="flex items-center justify-center space-x-2">
               <span className="text-2xl">Total Kicks:</span>
               <span className="text-3xl font-semibold text-blue-600">{userList.length}</span>

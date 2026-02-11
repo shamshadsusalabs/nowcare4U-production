@@ -42,7 +42,7 @@ export default function BlogManagement() {
 
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/admin/blogs?page=${currentPage}&limit=10`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/blogs?page=${currentPage}&limit=10`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -67,7 +67,7 @@ export default function BlogManagement() {
 
     try {
       setDeleting(blogId);
-      const response = await fetch(`http://localhost:5000/api/admin/blogs/${blogId}`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/admin/blogs/${blogId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

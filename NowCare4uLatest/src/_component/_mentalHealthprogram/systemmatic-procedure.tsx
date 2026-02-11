@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { ChevronDown, ChevronUp, Shield, Database, Users, Cpu, Video, Phone } from "lucide-react"
-import heartImg from "../assets/nowCareLogo.png"
+import heartImg from "../../assets/nowCareLogo.png"
 
 const SystematicProcedure = () => {
   const [showMore, setShowMore] = useState(false)

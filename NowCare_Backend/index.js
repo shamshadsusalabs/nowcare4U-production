@@ -55,6 +55,11 @@ app.use('/api/products', productRoutes);
 app.use('/api/invoices', require('./routes/productInvoiceRoutes'));
 app.use('/api/labs', require('./routes/labRoutes'));
 app.use('/api/lab-services', require('./routes/labServiceRoutes'));
+app.use('/api/content', require('./routes/contentRoutes'));
+app.use('/api/tutorials', require('./routes/tutorialRoutes'));
+app.use('/api/quizzes', require('./routes/quizRoutes'));
+app.use('/api/surveys', require('./routes/surveyRoutes'));
+app.use('/api/programs', require('./routes/programRoutes'));
 // Error handling
 app.use(errorHandler);
 

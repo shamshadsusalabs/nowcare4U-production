@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { Invoice, CreateInvoicePayload } from '../types/invoice.types';
 
-const API_URL = 'http://localhost:5000/api/invoices';
+const API_URL = 'https://nowcare4-u-production-acbz.vercel.app/api/invoices';
 
 export const invoiceService = {
     // Get all invoices with filtering

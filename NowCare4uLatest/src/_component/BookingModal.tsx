@@ -54,7 +54,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
     try {
       console.log('Fetching slots for doctor ID:', doctor._id)
       // Use the correct API endpoint for public available slots
-      const response = await fetch(`http://localhost:5000/api/public/doctors/${doctor._id}/available-slots`)
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/public/doctors/${doctor._id}/available-slots`)
       const data = await response.json()
       console.log('Available slots response:', data)
       if (data.success) {
@@ -86,7 +86,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
 
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:5000/api/bookings', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -137,7 +137,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-2xl font-bold">Book Appointment</h2>
-              <p className="text-blue-100">with Dr. {doctor.name}</p>
+              <p className="text-blue-100">with {doctor.name}</p>
             </div>
             <button
               onClick={resetModal}
@@ -305,7 +305,7 @@ const BookingModal = ({ isOpen, onClose, doctor }: BookingModalProps) => {
               <div className="bg-gray-50 rounded-xl p-6 text-left">
                 <h4 className="font-semibold text-gray-900 mb-4">Appointment Details</h4>
                 <div className="space-y-2 text-sm">
-                  <p><span className="font-medium">Doctor:</span> Dr. {doctor.name}</p>
+                  <p><span className="font-medium">Doctor:</span> {doctor.name}</p>
                   <p><span className="font-medium">Patient:</span> {booking.patientName}</p>
                   <p><span className="font-medium">Date:</span> {new Date(booking.appointmentDate).toLocaleDateString()}</p>
                   <p><span className="font-medium">Time:</span> {booking.appointmentTime}</p>

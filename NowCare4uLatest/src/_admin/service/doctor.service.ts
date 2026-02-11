@@ -1,6 +1,6 @@
 import type { Doctor, DoctorFormData } from '../types/doctor.types';
 
-const API_BASE = 'http://localhost:5000/api/admin';
+const API_BASE = 'https://nowcare4-u-production-acbz.vercel.app/api/admin';
 
 export const doctorService = {
     // Get all doctors

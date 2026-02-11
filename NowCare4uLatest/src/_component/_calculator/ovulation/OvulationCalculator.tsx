@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../auth/UserContext';
+import { useUser } from '../../../auth/UserContext';
 
 function addDays(date: Date, days: number) {
   const d = new Date(date.getTime());
@@ -95,7 +95,7 @@ const OvulationCalculator: React.FC = () => {
     if (!computed) return;
     try {
       setSaving(true);
-      const res = await fetch('/api/ovulation/calculate', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/ovulation/calculate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

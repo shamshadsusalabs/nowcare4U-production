@@ -1,6 +1,6 @@
 
 
-const API_BASE = 'http://localhost:5000/api/products';
+const API_BASE = 'https://nowcare4-u-production-acbz.vercel.app/api/products';
 
 export const productService = {
     getProducts: async (token?: string, filters?: { pharmacistId?: string; search?: string; category?: string }) => {

@@ -50,7 +50,7 @@ const BlogDetail = () => {
 
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/api/blogs/getById/${blogId}`);
+        const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app/api/blogs/getById/${blogId}`);
         const result = await response.json();
 
         if (result.success && result.data) {

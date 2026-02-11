@@ -79,7 +79,7 @@ const DoctorProfileForm = ({ doctor, token, onUpdate, onCancel }: DoctorProfileF
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/doctors/profile', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

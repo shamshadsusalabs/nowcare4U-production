@@ -24,7 +24,7 @@ const PhoneLogin: React.FC = () => {
     }
     try {
       setLoading(true);
-      const res = await fetch('/api/phone-auth/phone-login', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/phone-auth/phone-login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: phone.trim(), displayName: name.trim() }),

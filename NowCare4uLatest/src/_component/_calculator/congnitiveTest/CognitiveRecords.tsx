@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useUser } from '../../auth/UserContext';
+import { useUser } from '../../../auth/UserContext';
 
 interface Progress {
   correctC: number;
@@ -34,7 +34,7 @@ export default function CognitiveRecords() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/test/progress', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/test/progress', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -51,7 +51,7 @@ export default function CognitiveRecords() {
     if (!token) return;
     if (!confirm('Clear cognitive test progress?')) return;
     try {
-      const res = await fetch('/api/test/progress', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/test/progress', {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

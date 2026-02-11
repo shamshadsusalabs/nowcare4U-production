@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useUser } from '../../auth/UserContext';
+import { useUser } from '../../../auth/UserContext';
 import RealTest from './RealTest';
 
 export default function CognitiveTest() {

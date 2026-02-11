@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUser } from '../../auth/UserContext';
+import { useUser } from '../../../auth/UserContext';
 
 interface WeightEntry { week: number; weight: number }
 interface Baseline { preWeightKg: number; heightCm: number; bmi: number; minGainKg: number; maxGainKg: number; e: number }
@@ -34,7 +34,7 @@ export default function PregnancyWeightRecords() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/pregnancy-weight/record', { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/pregnancy-weight/record', { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || 'Failed to load');
       if (!data) {
@@ -59,7 +59,7 @@ export default function PregnancyWeightRecords() {
   const addEntry = async () => {
     if (!token) return;
     try {
-      const res = await fetch('/api/pregnancy-weight/entry', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/pregnancy-weight/entry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ week, weight }),
@@ -77,7 +77,7 @@ export default function PregnancyWeightRecords() {
     if (!token) return;
     if (!confirm('Delete your pregnancy weight record?')) return;
     try {
-      const res = await fetch('/api/pregnancy-weight/record', { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/pregnancy-weight/record', { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || 'Failed to delete');
       await load();

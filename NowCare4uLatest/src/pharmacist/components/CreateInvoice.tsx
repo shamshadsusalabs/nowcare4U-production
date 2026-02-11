@@ -162,7 +162,7 @@ export default function CreateInvoice({ onSuccess }: CreateInvoiceProps) {
                             </h2>
                             <div className="text-sm text-gray-500 space-y-0.5">
                                 <p className="flex items-center gap-2"><MapPin className="w-3 h-3" /> {pharmacist?.address || 'Pharmacy Address'}, {pharmacist?.city}-{pharmacist?.pincode}</p>
-                                <p className="flex items-center gap-2"><Phone className="w-3 h-3" /> {pharmacist?.phone || 'Phone'}</p>
+                                <p className="flex items-center gap-2"><Phone className="w-3 h-3" /> {pharmacist?.phoneNumber || 'Phone'}</p>
                                 <p className="flex items-center gap-2"><Mail className="w-3 h-3" /> {pharmacist?.email || 'Email'}</p>
                                 <p className="text-xs mt-2 font-medium">GSTIN: {pharmacist?.gstNumber || 'N/A'} | DL: {pharmacist?.licenseNumber || 'N/A'}</p>
                             </div>

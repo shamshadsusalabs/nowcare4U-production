@@ -1,6 +1,6 @@
 import type { AdminProduct } from '../types/product.types';
 
-const API_BASE = 'http://localhost:5000/api/products';
+const API_BASE = 'https://nowcare4-u-production-acbz.vercel.app/api/products';
 
 export const adminProductService = {
     getAllProducts: async (token: string) => {

@@ -1,6 +1,6 @@
 
-const API_BASE = 'http://localhost:5000/api/labs';
-const SERVICE_API_BASE = 'http://localhost:5000/api/lab-services';
+const API_BASE = 'https://nowcare4-u-production-acbz.vercel.app/api/labs';
+const SERVICE_API_BASE = 'https://nowcare4-u-production-acbz.vercel.app/api/lab-services';
 
 export const labService = {
     // Auth & Profile

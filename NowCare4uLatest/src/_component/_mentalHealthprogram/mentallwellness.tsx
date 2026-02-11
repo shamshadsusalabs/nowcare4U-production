@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { ChevronDown, ChevronUp, Target, Brain, Heart, Lightbulb } from "lucide-react"
-import heartImg from "../assets/nowCareLogo.png"
+import heartImg from "../../assets/nowCareLogo.png"
 
 const MentalWellnessApproach = () => {
   const [showMore, setShowMore] = useState(false)

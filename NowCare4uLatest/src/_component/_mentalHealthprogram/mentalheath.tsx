@@ -25,7 +25,7 @@ import {
   Clock,
   ArrowRight,
 } from "lucide-react"
-import heartImg from "../assets/nowCareLogo.png"
+import heartImg from "../../assets/nowCareLogo.png"
 
 export default function MentalHealthProgram() {
   const [activeTab, setActiveTab] = useState<"overview" | "programs" | "therapy" | "research">("overview")

@@ -6,7 +6,7 @@ import {
   Heart,
   Phone,
   MapPin,
-  ExternalLink,
+
   Mail,
   Shield,
   Award,

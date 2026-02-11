@@ -76,7 +76,7 @@ const DoctorAuth = ({ onAuthSuccess }: DoctorAuthProps) => {
         ? { email: formData.email, password: formData.password }
         : formData
 
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`https://nowcare4-u-production-acbz.vercel.app${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

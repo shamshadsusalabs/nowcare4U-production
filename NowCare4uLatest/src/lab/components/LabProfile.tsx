@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { User, Phone, FileText, CheckCircle, XCircle, CreditCard, Upload, MapPin, Building2, FlaskConical } from "lucide-react"
+import { Phone, FileText, CheckCircle, XCircle, CreditCard, Upload, MapPin, Building2, FlaskConical } from "lucide-react"
 import { useLabStore } from "../store/labStore"
 
 const LabProfile = () => {

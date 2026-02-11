@@ -60,7 +60,7 @@ const DoctorDashboard = ({ doctor: initialDoctor, token, onLogout }: DoctorDashb
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/doctors/bookings', {
+      const response = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/doctors/bookings', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {

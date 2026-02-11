@@ -108,11 +108,37 @@ const uploadProduct = multer({
   limits: { fileSize: 5 * 1024 * 1024 }
 });
 
+// Storage for Content Files (Images + PDFs)
+const contentStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    const isPDF = file.mimetype === 'application/pdf';
+    return {
+      folder: 'content-files',
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'pdf'],
+      resource_type: isPDF ? 'raw' : 'image',
+      transformation: isPDF ? undefined : [{ width: 1200, height: 1200, crop: 'limit', quality: 'auto' }]
+    };
+  }
+});
+
+const uploadContent = multer({
+  storage: contentStorage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  fileFilter: (req, file, cb) => {
+    const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only JPG, PNG, WebP, and PDF files are allowed.'));
+    }
+  }
+});
+
 module.exports = {
   uploadBlogImage,
   uploadPharmacistDocs,
   uploadLabDocs,
-  uploadProductImages: uploadProduct.array('images', 5)
+  uploadProductImages: uploadProduct.array('images', 5),
+  uploadContentFiles: uploadContent.array('files', 10)
 };
-
-

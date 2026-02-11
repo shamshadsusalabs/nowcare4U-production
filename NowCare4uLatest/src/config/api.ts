@@ -5,7 +5,7 @@ const isDevelopment = import.meta.env.DEV;
 // In production, use the full backend URL
 export const API_BASE_URL = isDevelopment
     ? '/api'
-    : 'http://localhost:5000/api';
+    : 'https://nowcare4-u-production-acbz.vercel.app/api';
 
 /**
  * Helper function to build API URLs

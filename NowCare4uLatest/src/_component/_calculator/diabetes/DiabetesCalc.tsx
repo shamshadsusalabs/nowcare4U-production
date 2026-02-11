@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useUser } from '../../auth/UserContext';
+import { useUser } from '../../../auth/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 interface Inputs {
@@ -92,7 +92,7 @@ export default function DiabetesCalc() {
     const { dmV, pdmV } = calculate();
     setSaving(true);
     try {
-      const res = await fetch('/api/diabetes/records', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/diabetes/records', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

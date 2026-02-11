@@ -52,6 +52,10 @@ const PhoneLogin = lazy(() => import('./auth/PhoneLogin'))
 const Addblog = lazy(() => import('./_admin/addblog'))
 const ProtectedAdminRoute = lazy(() => import('./_admin/ProtectedAdminRoute'))
 
+// Unified Program Management
+const ProgramManagement = lazy(() => import('./_admin/program/ProgramManagement'))
+const ProgramPage = lazy(() => import('./_component/ProgramPage'))
+
 function App() {
   const location = useLocation()
   const isDoctorRoute = location.pathname === '/doctor'
@@ -104,6 +108,14 @@ function App() {
         <Route
           path="/contact"
           element={<ContactUs />}
+        />
+        <Route
+          path="/programs"
+          element={
+            <Suspense fallback={<div className="text-center p-10">Loading...</div>}>
+              <ProgramPage />
+            </Suspense>
+          }
         />
         <Route
           path="/calculators"
@@ -339,6 +351,9 @@ function App() {
           <Route path="labs" element={<LabManagement />} />
           <Route path="blogs" element={<BlogManagement />} />
           <Route path="addblog" element={<Addblog />} />
+
+          {/* Unified Program Management */}
+          <Route path="programs" element={<ProgramManagement />} />
         </Route>
         <Route
           path="/addblog"

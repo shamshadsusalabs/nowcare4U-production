@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useUser } from '../../auth/UserContext';
+import { useUser } from '../../../auth/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function PregnancyWeightCalc() {
@@ -15,14 +15,14 @@ export default function PregnancyWeightCalc() {
     const load = async () => {
       if (!token) return;
       try {
-        const res = await fetch('/api/pregnancy-weight/record', {
+        const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/pregnancy-weight/record', {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
           const data = await res.json();
           if (data) setExisting(true);
         }
-      } catch {}
+      } catch { }
     };
     load();
   }, [token]);
@@ -31,7 +31,7 @@ export default function PregnancyWeightCalc() {
     if (!token) return;
     setLoading(true);
     try {
-      const res = await fetch('/api/pregnancy-weight/baseline', {
+      const res = await fetch('https://nowcare4-u-production-acbz.vercel.app/api/pregnancy-weight/baseline', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

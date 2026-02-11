@@ -42,6 +42,7 @@ const Navbar = (): JSX.Element => {
     { name: 'Experts', path: '/experts' },
     { name: 'Services', path: '/ourservice' },
     { name: 'Calculators', path: '/calculators' },
+    { name: 'Program', path: '/programs' },
     { name: 'Blog', path: '/blog' },
     { name: 'Mental Health', path: '/mental-health' },
     { name: 'Career', path: '/career' },
